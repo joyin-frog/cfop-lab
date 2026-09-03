@@ -1,16 +1,23 @@
-import { useMemo, useState } from "react";
-import { BookOpen, ChevronDown, Copy, Filter, Menu, Search, Settings2, Shuffle, Sparkles, Star, Target, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { BookOpen, CalendarDays, ChevronDown, Copy, Filter, Menu, Search, Settings2, Shuffle, Sparkles, Star, Target, X } from "lucide-react";
 import { CaseCard } from "./components/CaseCard";
 import { CaseDialog } from "./components/CaseDialog";
 import { CatalogActions, MobileFilterSheet } from "./components/CatalogControls";
+import { DailyReviewDialog } from "./components/DailyReviewDialog";
 import { casesByStage, crossLessons, stageMeta } from "./data/cfopData";
-import { completeReview, isReviewDue, markMastered, progressStatus, startLearning } from "./lib/progress";
+import { completeReview, isReviewDue, markMastered, progressStatus, rateReview, startLearning } from "./lib/progress";
 
 const STAGES = ["cross", "f2l", "oll", "pll"];
 const STATUS_FILTERS = [{ id: "all", label: "全部" }, { id: "learning", label: "学习清单" }, { id: "review", label: "需要复习" }, { id: "mastered", label: "已掌握" }, { id: "favorite", label: "收藏" }];
+const ALL_CASES = Object.values(casesByStage).flat();
+const DAILY_LIMIT = 6;
+const SNOOZE_MS = 4 * 60 * 60 * 1000;
 
 function loadJSON(key) { try { return JSON.parse(localStorage.getItem(key)) || {}; } catch { return {}; } }
+function loadArray(key) { const value = loadJSON(key); return Array.isArray(value) ? value : []; }
 function progressKey(item) { return `${item.stage}-${item.id}`; }
+function localDateKey(date = new Date()) { const year = date.getFullYear(); const month = String(date.getMonth() + 1).padStart(2, "0"); const day = String(date.getDate()).padStart(2, "0"); return `${year}-${month}-${day}`; }
+function calculateStreak(history) { const completed = new Set(history); const cursor = new Date(); if (!completed.has(localDateKey(cursor))) cursor.setDate(cursor.getDate() - 1); let streak = 0; while (completed.has(localDateKey(cursor))) { streak += 1; cursor.setDate(cursor.getDate() - 1); } return streak; }
 
 export default function App() {
   const [stage, setStage] = useState("oll");
@@ -23,6 +30,10 @@ export default function App() {
   const [mobileNav, setMobileNav] = useState(false);
   const [mobileFilters, setMobileFilters] = useState(false);
   const [copied, setCopied] = useState("");
+  const [dailyReviewOpen, setDailyReviewOpen] = useState(false);
+  const [reviewSession, setReviewSession] = useState(null);
+  const [reviewHistory, setReviewHistory] = useState(() => loadArray("cfop-lab-review-history"));
+  const [reviewComplete, setReviewComplete] = useState(false);
   const cases = casesByStage[stage] || [];
   const groups = useMemo(() => [...new Set(cases.map((item) => item.group))], [cases]);
   const visible = useMemo(() => {
@@ -37,16 +48,59 @@ export default function App() {
   const mastered = cases.filter((item) => progressStatus(progress[progressKey(item)]) === "mastered").length;
   const learningItems = cases.filter((item) => progressStatus(progress[progressKey(item)]) === "learning");
   const reviewItems = cases.filter((item) => isReviewDue(progress[progressKey(item)]));
-  const practiceItems = reviewItems.length ? reviewItems : learningItems;
+  const allReviewItems = ALL_CASES.filter((item) => isReviewDue(progress[progressKey(item)]));
+  const allLearningItems = ALL_CASES.filter((item) => progressStatus(progress[progressKey(item)]) === "learning");
+  const dailyReviewItems = [...allReviewItems, ...allLearningItems].slice(0, DAILY_LIMIT);
+  const dailyDueCount = dailyReviewItems.filter((item) => isReviewDue(progress[progressKey(item)])).length;
+  const dailyLearningCount = dailyReviewItems.length - dailyDueCount;
   const grouped = groups.map((group) => ({ group, items: visible.filter((item) => item.group === group) })).filter((entry) => entry.items.length);
   const meta = stageMeta[stage];
   const activeFilterCount = Number(statusFilter !== "all") + Number(category !== "all");
+
+  useEffect(() => {
+    if (!dailyReviewItems.length) return undefined;
+    const today = localDateKey();
+    if (reviewHistory.includes(today) || localStorage.getItem("cfop-lab-review-dismissed") === today) return undefined;
+    const snoozeUntil = Number(localStorage.getItem("cfop-lab-review-snooze") || 0);
+    const shownToday = localStorage.getItem("cfop-lab-review-shown") === today;
+    if (shownToday && !snoozeUntil) return undefined;
+    const delay = snoozeUntil > Date.now() ? snoozeUntil - Date.now() : 700;
+    const timer = window.setTimeout(() => {
+      if (localStorage.getItem("cfop-lab-review-dismissed") === today || loadArray("cfop-lab-review-history").includes(today)) return;
+      setDailyReviewOpen(true);
+      localStorage.setItem("cfop-lab-review-shown", today);
+      localStorage.removeItem("cfop-lab-review-snooze");
+    }, delay);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   function changeStage(next) { setStage(next); setCategory("all"); setStatusFilter("all"); setQuery(""); setMobileNav(false); setMobileFilters(false); window.scrollTo({ top: 0, behavior: "smooth" }); }
   function updateProgress(item, updater) { const key = progressKey(item); setProgress((current) => { const next = { ...current, [key]: updater(current[key]) }; localStorage.setItem("cfop-lab-progress", JSON.stringify(next)); return next; }); }
   function addToLearning(item) { updateProgress(item, startLearning); }
   function setMastered(item) { updateProgress(item, markMastered); }
   function finishReview(item) { updateProgress(item, completeReview); }
+  function dismissDailyReview() { localStorage.setItem("cfop-lab-review-dismissed", localDateKey()); setDailyReviewOpen(false); }
+  function snoozeDailyReview() { const snoozeUntil = Date.now() + SNOOZE_MS; const today = localDateKey(); localStorage.setItem("cfop-lab-review-snooze", String(snoozeUntil)); setDailyReviewOpen(false); window.setTimeout(() => { if (localStorage.getItem("cfop-lab-review-dismissed") !== today && !loadArray("cfop-lab-review-history").includes(today)) setDailyReviewOpen(true); }, SNOOZE_MS); }
+  function startDailyReview() { if (!dailyReviewItems.length) return; setDailyReviewOpen(false); setReviewSession({ items: dailyReviewItems, index: 0 }); setSelected(dailyReviewItems[0]); }
+  function rateCurrentReview(rating) {
+    if (!selected || !reviewSession) return;
+    updateProgress(selected, (value) => rateReview(value, rating));
+    const nextIndex = reviewSession.index + 1;
+    if (nextIndex < reviewSession.items.length) {
+      setReviewSession({ ...reviewSession, index: nextIndex });
+      setSelected(reviewSession.items[nextIndex]);
+      return;
+    }
+    const today = localDateKey();
+    const nextHistory = [...new Set([...reviewHistory, today])];
+    localStorage.setItem("cfop-lab-review-history", JSON.stringify(nextHistory));
+    localStorage.setItem("cfop-lab-review-dismissed", today);
+    setReviewHistory(nextHistory);
+    setReviewSession(null);
+    setSelected(null);
+    setReviewComplete(true);
+    window.setTimeout(() => setReviewComplete(false), 2200);
+  }
   function toggleFavorite(item) { const key = progressKey(item); setFavorites((current) => { const next = { ...current, [key]: !current[key] }; localStorage.setItem("cfop-lab-favorites", JSON.stringify(next)); return next; }); }
   async function copyAlgorithm(item) { await navigator.clipboard.writeText(item.algorithm); setCopied(progressKey(item)); window.setTimeout(() => setCopied(""), 1200); }
 
@@ -73,7 +127,7 @@ export default function App() {
           <label className="sidebar-search"><Search /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜索编号、名称或公式" /></label>
           <div className="sidebar-block"><p><Filter />学习状态</p><div className="filter-chips">{STATUS_FILTERS.map((item) => <button className={statusFilter === item.id ? "is-active" : ""} type="button" key={item.id} onClick={() => setStatusFilter(item.id)}>{item.id === "favorite" && <Star />}{item.label}</button>)}</div></div>
           <div className="sidebar-block category-list"><p><ChevronDown />形状分组</p><button className={category === "all" ? "is-active" : ""} type="button" onClick={() => setCategory("all")}><span>全部案例</span><b>{cases.length}</b></button>{groups.map((group) => <button className={category === group ? "is-active" : ""} type="button" key={group} onClick={() => setCategory(group)}><span>{group}</span><b>{cases.filter((item) => item.group === group).length}</b></button>)}</div>
-          <button className="drill-button study-drill" type="button" disabled={!practiceItems.length} onClick={() => setSelected(practiceItems[Math.floor(Math.random() * practiceItems.length)])}><Shuffle /><span><strong>{reviewItems.length ? `复习 ${reviewItems.length} 个到期公式` : learningItems.length ? "只练学习清单" : "学习清单还是空的"}</strong><small>{reviewItems.length ? "优先处理需要复习的案例" : learningItems.length ? `${learningItems.length} 个公式等待练习` : "先打开案例并加入学习清单"}</small></span></button>
+          <button className="drill-button study-drill" type="button" onClick={() => setDailyReviewOpen(true)}><CalendarDays /><span><strong>每日回顾</strong><small>{dailyReviewItems.length ? `${dailyReviewItems.length} 个公式 · 约 ${Math.max(1, Math.ceil(dailyReviewItems.length * .65))} 分钟` : "今天没有待回顾公式"}</small></span></button>
           <button className="random-drill-button" type="button" onClick={() => setSelected(visible[Math.floor(Math.random() * visible.length)] || cases[0])}><Shuffle />随机抽取当前结果</button>
           <div className="mini-grid">{visible.slice(0, 24).map((item) => <button type="button" key={progressKey(item)} onClick={() => setSelected(item)}><img src={`/diagrams/${stage}-${item.id.toLowerCase()}.svg`} alt="" /><span>{item.id}</span></button>)}</div>
         </> : <div className="sidebar-note"><Target /><strong>十字不靠公式表</strong><p>这一步重点是观察、步数和连续执行。先把无限观察做到 8 步内，再压缩进 15 秒。</p></div>}
@@ -88,7 +142,7 @@ export default function App() {
           <details><summary><Settings2 />公式怎么记？<ChevronDown /></summary><p>先理解块的移动目的，再把公式切成常见手法。最终会形成肌肉记忆，但识别和拿法必须保持清楚。</p></details>
         </section>
         {stage === "cross" ? <CrossSection /> : <>
-          {practiceItems.length > 0 && <button className="mobile-practice-button" type="button" onClick={() => setSelected(practiceItems[Math.floor(Math.random() * practiceItems.length)])}><Shuffle /><span><strong>{reviewItems.length ? "开始到期复习" : "只练学习清单"}</strong><small>{practiceItems.length} 个案例</small></span></button>}
+          {dailyReviewItems.length > 0 && <button className="mobile-practice-button" type="button" onClick={() => setDailyReviewOpen(true)}><CalendarDays /><span><strong>打开每日回顾</strong><small>{dailyReviewItems.length} 个案例</small></span></button>}
           {(query || activeFilterCount > 0) && <div className="active-catalog-filters"><span>已应用 {Number(Boolean(query)) + activeFilterCount} 项条件</span><button type="button" onClick={() => { setQuery(""); setStatusFilter("all"); setCategory("all"); }}>清除全部</button></div>}
           <div className="catalog-title" id="catalog-results"><div><span>ALGORITHM CATALOG</span><h2>{meta.subtitle}</h2></div><div className="catalog-summary"><b>{visible.length}</b><span>当前显示</span></div></div>
           {grouped.length ? grouped.map(({ group, items }) => <section className="case-group" key={group}><div className="group-heading"><h3>{group}</h3><span>{items.length} CASES</span></div><div className="case-grid">{items.map((item) => { const entry = progress[progressKey(item)]; return <CaseCard key={progressKey(item)} item={item} status={progressStatus(entry)} reviewDue={isReviewDue(entry)} favorite={favorites[progressKey(item)]} onOpen={() => setSelected(item)} onAddToLearning={() => addToLearning(item)} onMarkMastered={() => setMastered(item)} onToggleFavorite={() => toggleFavorite(item)} onCopy={() => copyAlgorithm(item)} />; })}</div></section>) : <div className="empty-state"><Search /><strong>没有匹配的案例</strong><p>换一个分组或清空搜索试试。</p></div>}
@@ -97,6 +151,7 @@ export default function App() {
       </main>
     </div>
     {copied && <div className="toast"><Copy />公式已复制</div>}
+    {reviewComplete && <div className="toast review-toast"><CalendarDays />今日回顾完成</div>}
     <MobileFilterSheet
       open={mobileFilters}
       onOpenChange={setMobileFilters}
@@ -110,7 +165,8 @@ export default function App() {
       resultCount={visible.length}
       onReset={() => { setStatusFilter("all"); setCategory("all"); }}
     />
-    <CaseDialog item={selected} progress={selected ? progress[progressKey(selected)] : null} open={Boolean(selected)} onOpenChange={(open) => !open && setSelected(null)} onAddToLearning={() => selected && addToLearning(selected)} onMarkMastered={() => selected && setMastered(selected)} onCompleteReview={() => selected && finishReview(selected)} />
+    <DailyReviewDialog open={dailyReviewOpen} items={dailyReviewItems} dueCount={dailyDueCount} learningCount={dailyLearningCount} streak={calculateStreak(reviewHistory)} onStart={startDailyReview} onSnooze={snoozeDailyReview} onDismiss={dismissDailyReview} />
+    <CaseDialog item={selected} progress={selected ? progress[progressKey(selected)] : null} reviewSession={reviewSession ? { index: reviewSession.index, total: reviewSession.items.length } : null} open={Boolean(selected)} onOpenChange={(open) => { if (!open) { setSelected(null); setReviewSession(null); } }} onAddToLearning={() => selected && addToLearning(selected)} onMarkMastered={() => selected && setMastered(selected)} onCompleteReview={() => selected && finishReview(selected)} onRateReview={rateCurrentReview} />
   </div>;
 }
 

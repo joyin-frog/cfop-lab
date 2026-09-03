@@ -4,7 +4,7 @@ import { CalendarClock, Check, Copy, RefreshCcw, X } from "lucide-react";
 import { AnimatedCube } from "./AnimatedCube";
 import { formatReviewDate, isReviewDue, progressStatus } from "../lib/progress";
 
-export function CaseDialog({ item, progress, open, onOpenChange, onAddToLearning, onMarkMastered, onCompleteReview }) {
+export function CaseDialog({ item, progress, reviewSession, open, onOpenChange, onAddToLearning, onMarkMastered, onCompleteReview, onRateReview }) {
   const [copied, setCopied] = useState("");
   const status = progressStatus(progress);
   const reviewDue = isReviewDue(progress);
@@ -25,7 +25,7 @@ export function CaseDialog({ item, progress, open, onOpenChange, onAddToLearning
         <Dialog.Overlay className="dialog-overlay" />
         <Dialog.Content className="dialog-content">
           <div className="dialog-heading">
-            <div className="dialog-heading-copy"><b>{item.stage.toUpperCase()} {item.id}</b><span>{item.group}</span></div>
+            <div className="dialog-heading-copy"><b>{reviewSession ? "DAILY REVIEW" : `${item.stage.toUpperCase()} ${item.id}`}</b><span>{reviewSession ? `${String(reviewSession.index + 1).padStart(2, "0")} / ${String(reviewSession.total).padStart(2, "0")}` : item.group}</span></div>
             <Dialog.Close className="dialog-close" aria-label="关闭详情"><X /></Dialog.Close>
           </div>
 
@@ -53,7 +53,16 @@ export function CaseDialog({ item, progress, open, onOpenChange, onAddToLearning
                 <small className="formula-hint">左侧公式可逐步悬停演示</small>
               </div>
               {item.alternatives?.length > 0 && <details className="alternative-card"><summary>其他顺手公式（{item.alternatives.length}）</summary>{item.alternatives.map((alg) => <code key={alg}>{alg}</code>)}</details>}
-              <div className="progress-actions">
+              {reviewSession ? (
+                <div className="review-rating">
+                  <div><span>凭第一感觉选择</span><b>这一步会决定下次出现时间</b></div>
+                  <div className="review-rating-buttons">
+                    <button type="button" onClick={() => onRateReview("again")}><strong>忘了</strong><small>明天再练</small></button>
+                    <button type="button" onClick={() => onRateReview("hard")}><strong>有点犹豫</strong><small>缩短间隔</small></button>
+                    <button type="button" className="is-good" onClick={() => onRateReview("good")}><strong>很顺手</strong><small>延长间隔</small></button>
+                  </div>
+                </div>
+              ) : <div className="progress-actions">
                 {reviewDue ? (
                   <button className="master-button review" type="button" onClick={onCompleteReview}><RefreshCcw />完成本次复习</button>
                 ) : status === "mastered" ? (
@@ -62,7 +71,7 @@ export function CaseDialog({ item, progress, open, onOpenChange, onAddToLearning
                   <button className="master-button" type="button" onClick={status === "learning" ? onMarkMastered : onAddToLearning}>{status === "learning" ? "标记为已掌握" : "加入学习清单"}</button>
                 )}
                 {status === "mastered" && <button className="relearn-button" type="button" onClick={onAddToLearning}>重新学习</button>}
-              </div>
+              </div>}
             </section>
           </div>
         </Dialog.Content>

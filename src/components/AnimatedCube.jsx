@@ -4,7 +4,7 @@ import "cubing/twisty";
 
 const MOVE_SETTLE_DELAY = 40;
 
-export function AnimatedCube({ algorithm, label }) {
+export function AnimatedCube({ algorithm, label, compact = false }) {
   const playerRef = useRef(null);
   const previewTimerRef = useRef(null);
   const previewRunRef = useRef(0);
@@ -80,7 +80,7 @@ export function AnimatedCube({ algorithm, label }) {
   }
 
   return (
-    <div className={ready ? "animated-cube is-ready" : "animated-cube"}>
+    <div className={`${ready ? "animated-cube is-ready" : "animated-cube"} ${compact ? "is-compact" : ""}`}>
       <div className="cube-stage">
         <div className="twisty-mount">
           <twisty-player
@@ -105,7 +105,7 @@ export function AnimatedCube({ algorithm, label }) {
         {!ready && <span className="cube-loading">正在准备 3D 魔方…</span>}
       </div>
 
-      <div className="formula-scrubber">
+      {!compact && <div className="formula-scrubber">
         <div className="scrubber-heading">
           <span>悬停步骤，逐手预览</span>
           <b>{activeMove < 0 ? "READY" : `${String(activeMove + 1).padStart(2, "0")} / ${String(moves.length).padStart(2, "0")}`}</b>
@@ -132,7 +132,7 @@ export function AnimatedCube({ algorithm, label }) {
           ))}
         </div>
         <small>电脑用鼠标依次划过；手机点按任一步。拖动魔方可换视角。</small>
-      </div>
+      </div>}
     </div>
   );
 }
