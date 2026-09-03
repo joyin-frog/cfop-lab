@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Check, Copy, X } from "lucide-react";
-import { CaseDiagram } from "./CaseDiagram";
+import { AnimatedCube } from "./AnimatedCube";
 
 export function CaseDialog({ item, status, open, onOpenChange, onCycleStatus }) {
   const [copied, setCopied] = useState("");
@@ -28,8 +28,7 @@ export function CaseDialog({ item, status, open, onOpenChange, onCycleStatus }) 
 
           <div className="dialog-layout">
             <section className="diagram-panel" aria-label="状态识别图">
-              <CaseDiagram stage={item.stage} caseId={item.id} detail label={`${item.name} 状态识别图`} />
-              <p>图下方是你面对的前面</p>
+              <AnimatedCube algorithm={item.algorithm} label={`${item.name} 公式动画`} />
             </section>
 
             <section className="lesson-panel">
@@ -48,6 +47,7 @@ export function CaseDialog({ item, status, open, onOpenChange, onCycleStatus }) 
                   </button>
                 </div>
                 <code className="dialog-formula">{item.algorithm}</code>
+                <small className="formula-hint">左侧公式可逐步悬停演示</small>
               </div>
               {item.alternatives?.length > 0 && <details className="alternative-card"><summary>其他顺手公式（{item.alternatives.length}）</summary>{item.alternatives.map((alg) => <code key={alg}>{alg}</code>)}</details>}
               <button className={`master-button ${status === "mastered" ? "done" : ""}`} type="button" onClick={onCycleStatus}>{status === "mastered" ? <><Check />已掌握，点击重置</> : status === "learning" ? "标记为已掌握" : "加入正在学习"}</button>
