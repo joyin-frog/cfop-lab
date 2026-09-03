@@ -82,3 +82,14 @@
 }
 @media(max-width:420px){.sheet-filter-chips{grid-template-columns:1fr 1fr}.sheet-categories{grid-template-columns:1fr}.sheet-categories h3{grid-column:1}}
 @keyframes sheet-slide-in-mobile{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+/* Learning queue and review states */
+.case-card.status-review{border-color:#e1c968;box-shadow:inset 3px 0 #e1bd2e}.case-card.status-review .case-actions button:first-child{color:#9b7910;font-weight:700}
+.study-drill{margin-bottom:7px}.study-drill:disabled{cursor:default;background:#e8ebf1;color:#8b94a5}.study-drill:disabled>svg{color:#a8afbb}.study-drill:disabled small{color:#8b94a5}
+.random-drill-button{display:flex;width:100%;align-items:center;justify-content:center;gap:6px;margin-bottom:20px;padding:8px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--muted);font-size:9px;font-weight:700}.random-drill-button:hover{border-color:#cbd1de;color:var(--brand)}.random-drill-button svg{width:12px}
+.mobile-practice-button{display:none}
+.progress-actions{display:grid;gap:8px;margin-top:11px}.progress-actions .master-button{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:0}.progress-actions .master-button svg{width:14px}.progress-actions .master-button.review{background:#aa8411}
+.mastered-status{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #b9dfd2;border-radius:9px;background:#f1faf7;color:var(--green)}.mastered-status>svg{width:18px}.mastered-status>span{display:flex;flex-direction:column;gap:2px}.mastered-status strong{font-size:10px}.mastered-status small{display:flex;align-items:center;gap:4px;color:#638478;font-size:8px}.mastered-status small svg{width:10px}
+.relearn-button{justify-self:center;padding:2px 4px;border:0;background:transparent;color:var(--muted);font-size:9px;text-decoration:underline;text-underline-offset:3px}.relearn-button:hover{color:var(--brand)}
+.sheet-filter-chips{grid-template-columns:repeat(auto-fit,minmax(82px,1fr))}
+@media(max-width:760px){.mobile-practice-button{display:flex;width:100%;align-items:center;gap:10px;margin-top:25px;padding:12px 14px;border:0;border-radius:11px;background:var(--brand-deep);color:#fff;text-align:left}.mobile-practice-button>svg{width:17px;color:var(--yellow)}.mobile-practice-button>span{display:flex;flex:1;align-items:center;justify-content:space-between}.mobile-practice-button strong{font-size:10px}.mobile-practice-button small{color:rgba(255,255,255,.62);font:500 8px var(--mono)}}

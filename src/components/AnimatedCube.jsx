@@ -60,6 +60,25 @@ export function AnimatedCube({ algorithm, label }) {
     }, MOVE_SETTLE_DELAY);
   }
 
+  function resetPreview() {
+    const player = playerRef.current;
+    if (!player || !ready) return;
+
+    previewRunRef.current += 1;
+    window.clearTimeout(previewTimerRef.current);
+    player.pause();
+    player.jumpToStart({ flash: false });
+    setActiveMove(-1);
+  }
+
+  function handlePreviewLeave(event) {
+    if (event.pointerType !== "touch") resetPreview();
+  }
+
+  function handlePreviewBlur(event) {
+    if (!event.currentTarget.contains(event.relatedTarget)) resetPreview();
+  }
+
   return (
     <div className={ready ? "animated-cube is-ready" : "animated-cube"}>
       <div className="cube-stage">
@@ -91,7 +110,12 @@ export function AnimatedCube({ algorithm, label }) {
           <span>悬停步骤，逐手预览</span>
           <b>{activeMove < 0 ? "READY" : `${String(activeMove + 1).padStart(2, "0")} / ${String(moves.length).padStart(2, "0")}`}</b>
         </div>
-        <div className="move-tokens" aria-label="可交互公式步骤">
+        <div
+          className="move-tokens"
+          aria-label="可交互公式步骤"
+          onPointerLeave={handlePreviewLeave}
+          onBlur={handlePreviewBlur}
+        >
           {moves.map((move, index) => (
             <button
               className={activeMove === index ? "move-token is-active" : "move-token"}

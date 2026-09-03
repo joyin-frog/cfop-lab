@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Check, Copy, X } from "lucide-react";
+import { CalendarClock, Check, Copy, RefreshCcw, X } from "lucide-react";
 import { AnimatedCube } from "./AnimatedCube";
+import { formatReviewDate, isReviewDue, progressStatus } from "../lib/progress";
 
-export function CaseDialog({ item, status, open, onOpenChange, onCycleStatus }) {
+export function CaseDialog({ item, progress, open, onOpenChange, onAddToLearning, onMarkMastered, onCompleteReview }) {
   const [copied, setCopied] = useState("");
+  const status = progressStatus(progress);
+  const reviewDue = isReviewDue(progress);
 
   useEffect(() => setCopied(""), [item]);
 
@@ -50,7 +53,16 @@ export function CaseDialog({ item, status, open, onOpenChange, onCycleStatus }) 
                 <small className="formula-hint">左侧公式可逐步悬停演示</small>
               </div>
               {item.alternatives?.length > 0 && <details className="alternative-card"><summary>其他顺手公式（{item.alternatives.length}）</summary>{item.alternatives.map((alg) => <code key={alg}>{alg}</code>)}</details>}
-              <button className={`master-button ${status === "mastered" ? "done" : ""}`} type="button" onClick={onCycleStatus}>{status === "mastered" ? <><Check />已掌握，点击重置</> : status === "learning" ? "标记为已掌握" : "加入正在学习"}</button>
+              <div className="progress-actions">
+                {reviewDue ? (
+                  <button className="master-button review" type="button" onClick={onCompleteReview}><RefreshCcw />完成本次复习</button>
+                ) : status === "mastered" ? (
+                  <div className="mastered-status"><Check /><span><strong>已掌握</strong><small><CalendarClock />{formatReviewDate(progress)}</small></span></div>
+                ) : (
+                  <button className="master-button" type="button" onClick={status === "learning" ? onMarkMastered : onAddToLearning}>{status === "learning" ? "标记为已掌握" : "加入学习清单"}</button>
+                )}
+                {status === "mastered" && <button className="relearn-button" type="button" onClick={onAddToLearning}>重新学习</button>}
+              </div>
             </section>
           </div>
         </Dialog.Content>

@@ -1,10 +1,12 @@
-import { Check, Copy, Star } from "lucide-react";
+import { BookOpen, Check, Copy, RefreshCcw, Star } from "lucide-react";
 import { CaseDiagram } from "./CaseDiagram";
 
-export function CaseCard({ item, status, favorite, onOpen, onCycleStatus, onToggleFavorite, onCopy }) {
+export function CaseCard({ item, status, reviewDue, favorite, onOpen, onAddToLearning, onMarkMastered, onToggleFavorite, onCopy }) {
+  const progressAction = reviewDue ? onOpen : status === "new" ? onAddToLearning : status === "learning" ? onMarkMastered : onOpen;
+  const progressLabel = reviewDue ? "需要复习" : status === "mastered" ? "已掌握" : status === "learning" ? "标记已掌握" : "加入学习清单";
 
   return (
-    <article className={`case-card status-${status}`}>
+    <article className={`case-card status-${reviewDue ? "review" : status}`}>
       <button className="case-visual" type="button" onClick={onOpen} aria-label={`打开 ${item.name}`}>
         <CaseDiagram stage={item.stage} caseId={item.id} label={`${item.name} 状态图`} />
       </button>
@@ -20,7 +22,10 @@ export function CaseCard({ item, status, favorite, onOpen, onCycleStatus, onTogg
         </button>
         <code className="formula-line">{item.algorithm}</code>
         <div className="case-actions">
-          <button type="button" onClick={onCycleStatus}>{status === "mastered" && <Check />}{status === "mastered" ? "已掌握" : status === "learning" ? "正在学" : "标记进度"}</button>
+          <button type="button" onClick={progressAction}>
+            {reviewDue ? <RefreshCcw /> : status === "mastered" ? <Check /> : status === "learning" ? <BookOpen /> : null}
+            {progressLabel}
+          </button>
           <button type="button" onClick={onCopy}><Copy />复制</button>
         </div>
       </div>
