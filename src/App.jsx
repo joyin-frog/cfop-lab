@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { BookOpen, ChevronDown, Copy, Filter, Menu, Search, Settings2, Shuffle, Sparkles, Star, Target, X } from "lucide-react";
 import { CaseCard } from "./components/CaseCard";
 import { CaseDialog } from "./components/CaseDialog";
+import { CatalogActions, MobileFilterSheet } from "./components/CatalogControls";
 import { casesByStage, crossLessons, stageMeta, statusMeta } from "./data/cfopData";
 
 const STAGES = ["cross", "f2l", "oll", "pll"];
@@ -19,6 +20,7 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(null);
   const [mobileNav, setMobileNav] = useState(false);
+  const [mobileFilters, setMobileFilters] = useState(false);
   const [copied, setCopied] = useState("");
   const cases = casesByStage[stage] || [];
   const groups = useMemo(() => [...new Set(cases.map((item) => item.group))], [cases]);
@@ -34,8 +36,9 @@ export default function App() {
   const mastered = cases.filter((item) => progress[progressKey(item)] === "mastered").length;
   const grouped = groups.map((group) => ({ group, items: visible.filter((item) => item.group === group) })).filter((entry) => entry.items.length);
   const meta = stageMeta[stage];
+  const activeFilterCount = Number(statusFilter !== "all") + Number(category !== "all");
 
-  function changeStage(next) { setStage(next); setCategory("all"); setStatusFilter("all"); setQuery(""); setMobileNav(false); window.scrollTo({ top: 0, behavior: "smooth" }); }
+  function changeStage(next) { setStage(next); setCategory("all"); setStatusFilter("all"); setQuery(""); setMobileNav(false); setMobileFilters(false); window.scrollTo({ top: 0, behavior: "smooth" }); }
   function cycleStatus(item) { const key = progressKey(item); setProgress((current) => { const next = { ...current, [key]: statusMeta[current[key] || "new"].next }; localStorage.setItem("cfop-lab-progress", JSON.stringify(next)); return next; }); }
   function toggleFavorite(item) { const key = progressKey(item); setFavorites((current) => { const next = { ...current, [key]: !current[key] }; localStorage.setItem("cfop-lab-favorites", JSON.stringify(next)); return next; }); }
   async function copyAlgorithm(item) { await navigator.clipboard.writeText(item.algorithm); setCopied(progressKey(item)); window.setTimeout(() => setCopied(""), 1200); }
@@ -45,7 +48,15 @@ export default function App() {
       <button className="mobile-menu" type="button" onClick={() => setMobileNav((value) => !value)} aria-label="打开菜单">{mobileNav ? <X /> : <Menu />}</button>
       <a className="site-brand" href="#top"><Logo /><span><strong>CFOP LAB</strong><small>三阶速拧学习库</small></span></a>
       <nav className={mobileNav ? "main-nav is-open" : "main-nav"} aria-label="CFOP 阶段">{STAGES.map((item) => <button className={stage === item ? "is-active" : ""} key={item} type="button" onClick={() => changeStage(item)}>{stageMeta[item].label}<small>{stageMeta[item].title}</small></button>)}</nav>
-      <div className="header-actions"><button type="button" onClick={() => document.querySelector("#catalog")?.scrollIntoView({ behavior: "smooth" })}><Search /></button><button type="button"><Settings2 /></button></div>
+      <CatalogActions
+        stage={stage}
+        query={query}
+        onQueryChange={setQuery}
+        resultCount={visible.length}
+        activeFilterCount={activeFilterCount}
+        onOpenFilters={() => setMobileFilters(true)}
+        onViewResults={() => document.querySelector("#catalog-results")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+      />
     </header>
 
     <div className="page" id="top">
@@ -69,14 +80,27 @@ export default function App() {
           <details><summary><Settings2 />公式怎么记？<ChevronDown /></summary><p>先理解块的移动目的，再把公式切成常见手法。最终会形成肌肉记忆，但识别和拿法必须保持清楚。</p></details>
         </section>
         {stage === "cross" ? <CrossSection /> : <>
-          <div className="mobile-tools"><label><Search /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜索案例" /></label><select value={category} onChange={(event) => setCategory(event.target.value)}><option value="all">全部分组</option>{groups.map((group) => <option key={group}>{group}</option>)}</select></div>
-          <div className="catalog-title"><div><span>ALGORITHM CATALOG</span><h2>{meta.subtitle}</h2></div><div className="catalog-summary"><b>{visible.length}</b><span>当前显示</span></div></div>
+          {(query || activeFilterCount > 0) && <div className="active-catalog-filters"><span>已应用 {Number(Boolean(query)) + activeFilterCount} 项条件</span><button type="button" onClick={() => { setQuery(""); setStatusFilter("all"); setCategory("all"); }}>清除全部</button></div>}
+          <div className="catalog-title" id="catalog-results"><div><span>ALGORITHM CATALOG</span><h2>{meta.subtitle}</h2></div><div className="catalog-summary"><b>{visible.length}</b><span>当前显示</span></div></div>
           {grouped.length ? grouped.map(({ group, items }) => <section className="case-group" key={group}><div className="group-heading"><h3>{group}</h3><span>{items.length} CASES</span></div><div className="case-grid">{items.map((item) => <CaseCard key={progressKey(item)} item={item} status={progress[progressKey(item)] || "new"} favorite={favorites[progressKey(item)]} onOpen={() => setSelected(item)} onCycleStatus={() => cycleStatus(item)} onToggleFavorite={() => toggleFavorite(item)} onCopy={() => copyAlgorithm(item)} />)}</div></section>) : <div className="empty-state"><Search /><strong>没有匹配的案例</strong><p>换一个分组或清空搜索试试。</p></div>}
         </>}
         <footer className="site-footer"><div><Logo small /><strong>CFOP LAB</strong></div><p>先理解，再重复，最后让手自己完成。</p></footer>
       </main>
     </div>
     {copied && <div className="toast"><Copy />公式已复制</div>}
+    <MobileFilterSheet
+      open={mobileFilters}
+      onOpenChange={setMobileFilters}
+      statusFilters={STATUS_FILTERS}
+      statusFilter={statusFilter}
+      onStatusFilterChange={setStatusFilter}
+      groups={groups}
+      category={category}
+      onCategoryChange={setCategory}
+      cases={cases}
+      resultCount={visible.length}
+      onReset={() => { setStatusFilter("all"); setCategory("all"); }}
+    />
     <CaseDialog item={selected} status={selected ? progress[progressKey(selected)] || "new" : "new"} open={Boolean(selected)} onOpenChange={(open) => !open && setSelected(null)} onCycleStatus={() => selected && cycleStatus(selected)} />
   </div>;
 }
