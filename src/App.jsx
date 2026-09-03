@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import { BookOpen, CalendarDays, ChevronDown, Copy, Filter, Menu, Search, Settings2, Shuffle, Sparkles, Star, Target, X } from "lucide-react";
+import { ArrowDownWideNarrow, BookOpen, CalendarDays, ChevronDown, Copy, Filter, Info, Menu, Search, Settings2, Shuffle, Sparkles, Star, Target, X } from "lucide-react";
 import { CaseCard } from "./components/CaseCard";
 import { CaseDialog } from "./components/CaseDialog";
 import { CatalogActions, MobileFilterSheet } from "./components/CatalogControls";
 import { DailyReviewDialog } from "./components/DailyReviewDialog";
 import { casesByStage, crossLessons, stageMeta } from "./data/cfopData";
 import { completeReview, isReviewDue, markMastered, progressStatus, rateReview, startLearning } from "./lib/progress";
+import { compareProbability } from "./lib/probability";
 
 const STAGES = ["cross", "f2l", "oll", "pll"];
 const STATUS_FILTERS = [{ id: "all", label: "全部" }, { id: "learning", label: "学习清单" }, { id: "review", label: "需要复习" }, { id: "mastered", label: "已掌握" }, { id: "favorite", label: "收藏" }];
@@ -26,6 +27,7 @@ export default function App() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [category, setCategory] = useState("all");
   const [query, setQuery] = useState("");
+  const [sortOrder, setSortOrder] = useState("default");
   const [selected, setSelected] = useState(null);
   const [mobileNav, setMobileNav] = useState(false);
   const [mobileFilters, setMobileFilters] = useState(false);
@@ -38,13 +40,16 @@ export default function App() {
   const groups = useMemo(() => [...new Set(cases.map((item) => item.group))], [cases]);
   const visible = useMemo(() => {
     const needle = query.trim().toLowerCase();
-    return cases.filter((item) => {
+    const matching = cases.filter((item) => {
       const key = progressKey(item); const state = progressStatus(progress[key]);
       const stateMatch = statusFilter === "all" || (statusFilter === "favorite" ? favorites[key] : statusFilter === "review" ? isReviewDue(progress[key]) : state === statusFilter);
       const categoryMatch = category === "all" || item.group === category;
       return stateMatch && categoryMatch && `${item.id} ${item.name} ${item.alias} ${item.group} ${item.algorithm}`.toLowerCase().includes(needle);
     });
-  }, [cases, category, favorites, progress, query, statusFilter]);
+    if (sortOrder === "probability") return [...matching].sort(compareProbability);
+    if (sortOrder === "id") return [...matching].sort((first, second) => first.id.localeCompare(second.id, undefined, { numeric: true }));
+    return matching;
+  }, [cases, category, favorites, progress, query, sortOrder, statusFilter]);
   const mastered = cases.filter((item) => progressStatus(progress[progressKey(item)]) === "mastered").length;
   const learningItems = cases.filter((item) => progressStatus(progress[progressKey(item)]) === "learning");
   const reviewItems = cases.filter((item) => isReviewDue(progress[progressKey(item)]));
@@ -53,7 +58,9 @@ export default function App() {
   const dailyReviewItems = [...allReviewItems, ...allLearningItems].slice(0, DAILY_LIMIT);
   const dailyDueCount = dailyReviewItems.filter((item) => isReviewDue(progress[progressKey(item)])).length;
   const dailyLearningCount = dailyReviewItems.length - dailyDueCount;
-  const grouped = groups.map((group) => ({ group, items: visible.filter((item) => item.group === group) })).filter((entry) => entry.items.length);
+  const grouped = sortOrder === "default"
+    ? groups.map((group) => ({ group, items: visible.filter((item) => item.group === group) })).filter((entry) => entry.items.length)
+    : visible.length ? [{ group: sortOrder === "probability" ? "按出现概率从高到低" : "按编号排列", items: visible }] : [];
   const meta = stageMeta[stage];
   const activeFilterCount = Number(statusFilter !== "all") + Number(category !== "all");
 
@@ -74,7 +81,7 @@ export default function App() {
     return () => window.clearTimeout(timer);
   }, []);
 
-  function changeStage(next) { setStage(next); setCategory("all"); setStatusFilter("all"); setQuery(""); setMobileNav(false); setMobileFilters(false); window.scrollTo({ top: 0, behavior: "smooth" }); }
+  function changeStage(next) { setStage(next); setCategory("all"); setStatusFilter("all"); setSortOrder("default"); setQuery(""); setMobileNav(false); setMobileFilters(false); window.scrollTo({ top: 0, behavior: "smooth" }); }
   function updateProgress(item, updater) { const key = progressKey(item); setProgress((current) => { const next = { ...current, [key]: updater(current[key]) }; localStorage.setItem("cfop-lab-progress", JSON.stringify(next)); return next; }); }
   function addToLearning(item) { updateProgress(item, startLearning); }
   function setMastered(item) { updateProgress(item, markMastered); }
@@ -144,6 +151,10 @@ export default function App() {
         {stage === "cross" ? <CrossSection /> : <>
           {dailyReviewItems.length > 0 && <button className="mobile-practice-button" type="button" onClick={() => setDailyReviewOpen(true)}><CalendarDays /><span><strong>打开每日回顾</strong><small>{dailyReviewItems.length} 个案例</small></span></button>}
           {(query || activeFilterCount > 0) && <div className="active-catalog-filters"><span>已应用 {Number(Boolean(query)) + activeFilterCount} 项条件</span><button type="button" onClick={() => { setQuery(""); setStatusFilter("all"); setCategory("all"); }}>清除全部</button></div>}
+          <div className="catalog-orderbar">
+            <p><Info />{stage === "f2l" ? "F2L 的实战频率取决于解槽顺序，不展示伪精确概率。" : `基于随机合法 ${stage.toUpperCase()} 状态的理论概率，统计包含跳过情况。`}</p>
+            <label><ArrowDownWideNarrow /><span>排序</span><select value={sortOrder} onChange={(event) => setSortOrder(event.target.value)}><option value="default">推荐分组</option>{stage !== "f2l" && <option value="probability">概率从高到低</option>}<option value="id">编号顺序</option></select></label>
+          </div>
           <div className="catalog-title" id="catalog-results"><div><span>ALGORITHM CATALOG</span><h2>{meta.subtitle}</h2></div><div className="catalog-summary"><b>{visible.length}</b><span>当前显示</span></div></div>
           {grouped.length ? grouped.map(({ group, items }) => <section className="case-group" key={group}><div className="group-heading"><h3>{group}</h3><span>{items.length} CASES</span></div><div className="case-grid">{items.map((item) => { const entry = progress[progressKey(item)]; return <CaseCard key={progressKey(item)} item={item} status={progressStatus(entry)} reviewDue={isReviewDue(entry)} favorite={favorites[progressKey(item)]} onOpen={() => setSelected(item)} onAddToLearning={() => addToLearning(item)} onMarkMastered={() => setMastered(item)} onToggleFavorite={() => toggleFavorite(item)} onCopy={() => copyAlgorithm(item)} />; })}</div></section>) : <div className="empty-state"><Search /><strong>没有匹配的案例</strong><p>换一个分组或清空搜索试试。</p></div>}
         </>}

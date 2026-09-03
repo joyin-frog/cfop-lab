@@ -41,6 +41,28 @@ const OLL_NAMES = {
   27: "小鱼",
 };
 
+// OLL has 216 equally likely orientation states (including OLL skip).
+// Rotational symmetry determines whether a named case covers 4, 2, or 1 states.
+const OLL_HALF_TURN_SYMMETRY = new Set([1, 21, 55, 56, 57]);
+const OLL_QUARTER_TURN_SYMMETRY = new Set([20]);
+
+// PLL has 72 equally likely permutation states (including PLL skip).
+const PLL_HALF_TURN_SYMMETRY = new Set(["E", "Z"]);
+const PLL_QUARTER_TURN_SYMMETRY = new Set(["H", "Na", "Nb"]);
+
+function ollProbabilityDenominator(id) {
+  const caseId = Number(id);
+  if (OLL_QUARTER_TURN_SYMMETRY.has(caseId)) return 216;
+  if (OLL_HALF_TURN_SYMMETRY.has(caseId)) return 108;
+  return 54;
+}
+
+function pllProbabilityDenominator(id) {
+  if (PLL_QUARTER_TURN_SYMMETRY.has(id)) return 72;
+  if (PLL_HALF_TURN_SYMMETRY.has(id)) return 36;
+  return 18;
+}
+
 function cleanAlg(value) {
   return value.replace(/[()]/g, "").replace(/2'/g, "2").replace(/\s+/g, " ").trim();
 }
@@ -63,6 +85,7 @@ export const ollCases = ollSource.map((item) => ({
   name: OLL_NAMES[item.id] || item.name,
   alias: OLL_NAMES[item.id] ? item.name : `OLL ${String(item.id).padStart(2, "0")}`,
   group: OLL_GROUPS[item.group] || item.group,
+  probabilityDenominator: ollProbabilityDenominator(item.id),
   algorithm: cleanAlg(item.algorithm),
   alternatives: [],
   recognition: "先看顶层黄贴形成的轮廓，再用侧面的黄色贴纸确认方向。只看顶面相似，拿法仍可能相反。",
@@ -82,6 +105,7 @@ export const pllCases = pllSource.map((item) => ({
   name: item.name,
   alias: `PLL ${item.id}`,
   group: pllGroup(item.id),
+  probabilityDenominator: pllProbabilityDenominator(item.id),
   algorithm: cleanAlg(item.algorithm),
   alternatives: [],
   recognition: "黄色面已经完成。寻找侧面同色的头灯、完整色条或需要循环的三块，再确定拿法。",

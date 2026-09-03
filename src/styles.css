@@ -125,3 +125,9 @@
   .daily-cube-preview .animated-cube.is-compact{width:min(116%,480px)}
   .daily-review-footer{min-height:90px;padding:18px 40px 20px 46px}
 }
+
+/* Case probability and catalog ordering */
+.case-kicker-meta{display:flex;min-width:0;align-items:center;gap:7px}.case-kicker-meta>small{padding:3px 5px;border:1px solid #e4d98d;border-radius:5px;background:#fffbea;color:#8a7316;font:500 7px var(--mono);letter-spacing:0;white-space:nowrap}
+.catalog-orderbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:28px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.72)}.catalog-orderbar p{display:flex;align-items:center;gap:7px;margin:0;color:var(--muted);font-size:9px;line-height:1.5}.catalog-orderbar p svg{width:13px;min-width:13px;color:var(--brand)}.catalog-orderbar label{display:flex;min-width:205px;height:34px;align-items:center;gap:7px;padding:0 9px;border-left:1px solid var(--line);color:var(--muted);font-size:9px}.catalog-orderbar label>svg{width:13px;color:var(--brand)}.catalog-orderbar select{flex:1;border:0;outline:0;background:transparent;color:var(--ink);font-size:9px;font-weight:700}.catalog-orderbar+.catalog-title{padding-top:32px}.dialog-probability{display:inline-flex;margin-left:8px;padding:3px 6px;border-radius:5px;background:#fff8cf;color:#806b13;font:500 8px var(--mono)}
+
+@media(max-width:760px){.catalog-orderbar{align-items:stretch;flex-direction:column;gap:8px;margin-top:22px;padding:11px}.catalog-orderbar label{width:100%;min-width:0;height:38px;padding-top:6px;border-top:1px solid var(--line);border-left:0}.catalog-orderbar+.catalog-title{padding-top:26px}}

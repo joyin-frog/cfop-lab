@@ -1,9 +1,11 @@
 import { BookOpen, Check, Copy, RefreshCcw, Star } from "lucide-react";
 import { CaseDiagram } from "./CaseDiagram";
+import { formatProbability } from "../lib/probability";
 
 export function CaseCard({ item, status, reviewDue, favorite, onOpen, onAddToLearning, onMarkMastered, onToggleFavorite, onCopy }) {
   const progressAction = reviewDue ? onOpen : status === "new" ? onAddToLearning : status === "learning" ? onMarkMastered : onOpen;
   const progressLabel = reviewDue ? "需要复习" : status === "mastered" ? "已掌握" : status === "learning" ? "标记已掌握" : "加入学习清单";
+  const probability = formatProbability(item);
 
   return (
     <article className={`case-card status-${reviewDue ? "review" : status}`}>
@@ -12,7 +14,7 @@ export function CaseCard({ item, status, reviewDue, favorite, onOpen, onAddToLea
       </button>
       <div className="case-body">
         <div className="case-kicker">
-          <span>{item.stage.toUpperCase()} {item.id}</span>
+          <span className="case-kicker-meta"><span>{item.stage.toUpperCase()} {item.id}</span>{probability && <small title="随机合法顶层状态中的理论出现概率">{probability}</small>}</span>
           <button className={favorite ? "icon-button is-favorite" : "icon-button"} type="button" onClick={onToggleFavorite} aria-label="收藏">
             <Star />
           </button>

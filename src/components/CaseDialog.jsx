@@ -3,6 +3,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { CalendarClock, Check, Copy, RefreshCcw, X } from "lucide-react";
 import { AnimatedCube } from "./AnimatedCube";
 import { formatReviewDate, isReviewDue, progressStatus } from "../lib/progress";
+import { formatProbability } from "../lib/probability";
 
 export function CaseDialog({ item, progress, reviewSession, open, onOpenChange, onAddToLearning, onMarkMastered, onCompleteReview, onRateReview }) {
   const [copied, setCopied] = useState("");
@@ -36,7 +37,7 @@ export function CaseDialog({ item, progress, reviewSession, open, onOpenChange, 
 
             <section className="lesson-panel">
               <Dialog.Title>{item.name}</Dialog.Title>
-              <Dialog.Description>{item.alias}</Dialog.Description>
+              <Dialog.Description>{item.alias}{formatProbability(item) && <span className="dialog-probability">出现概率 {formatProbability(item)}</span>}</Dialog.Description>
               <p className="lesson-lead">{item.recognition}</p>
 
               <div className="recognition-grid"><div><span>识别</span><p>{item.recognition}</p></div><div><span>拿法</span><p>{item.hold}</p></div></div>
