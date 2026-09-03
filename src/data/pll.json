@@ -1,0 +1,128 @@
+[
+  {
+    "id": "Aa",
+    "name": "Aa-Perm",
+    "algorithm": "x' R' U R' D2 R U' R' D2 R2 x",
+    "diagram": "  A   B  \n  \u250c\u2500\u2500\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nCorners: UBR \u21bb UFL \u21bb UFR"
+  },
+  {
+    "id": "Ab",
+    "name": "Ab-Perm",
+    "algorithm": "x' R U' R D2 R' U R D2 R2 x",
+    "diagram": "  A   B  \n  \u250c\u2500\u2500\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nCorners: UBR \u21ba UFR \u21ba UFL"
+  },
+  {
+    "id": "E",
+    "name": "E-Perm",
+    "algorithm": "x' R U' R' D R U R' D' R U R' D R U' R' D' x",
+    "diagram": "  A \u2194 B  \n  \u250c\u2500\u2500\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nCorners: UFL \u2194 UBL, UFR \u2194 UBR"
+  },
+  {
+    "id": "F",
+    "name": "F-Perm",
+    "algorithm": "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R",
+    "diagram": "    \u25b2    \n  \u250c\u2500\u253c\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u253c\u2500\u2518  \n    \u25bc    \nEdges: UB \u2194 UF"
+  },
+  {
+    "id": "Ga",
+    "name": "Ga-Perm",
+    "algorithm": "R2 U R' U R' U' R U' R2 D U' R' U R D'",
+    "diagram": "  A \u21bb B  \n  \u250c\u2500\u2500\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nCorners: UFL \u21bb UFR \u21bb UBR\nEdges:   UL  \u21bb UR  \u21bb UF"
+  },
+  {
+    "id": "Gb",
+    "name": "Gb-Perm",
+    "algorithm": "F' U' F R2 u R' U R U' R u' R2",
+    "diagram": "  A \u21ba B  \n  \u250c\u2500\u2500\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nCorners: UFL \u21ba UBR \u21ba UFR\nEdges:   UL  \u21ba UF  \u21ba UR"
+  },
+  {
+    "id": "Gc",
+    "name": "Gc-Perm",
+    "algorithm": "R2 U' R U' R U R' U R2 D' U R U' R' D",
+    "diagram": "  A \u21bb B  \n  \u250c\u2500\u2500\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nCorners: UFL \u21bb UBR \u21bb UFR\nEdges:   UL  \u21bb UF  \u21bb UR"
+  },
+  {
+    "id": "Gd",
+    "name": "Gd-Perm",
+    "algorithm": "R U R' y' R2 u' R U' R' U R' u R2",
+    "diagram": "  A \u21ba B  \n  \u250c\u2500\u2500\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nCorners: UFL \u21ba UFR \u21ba UBR\nEdges:   UL  \u21ba UR  \u21ba UF"
+  },
+  {
+    "id": "H",
+    "name": "H-Perm",
+    "algorithm": "M2 U M2 U2 M2 U M2",
+    "diagram": "    \u25b2    \n  \u250c\u2500\u253c\u2500\u2510  \n\u25c4\u2500\u253c\u2500\u253c\u2500\u253c\u2500\u25ba\n  \u2514\u2500\u253c\u2500\u2518  \n    \u25bc    \nEdges: UB \u2194 UF, UL \u2194 UR"
+  },
+  {
+    "id": "Ja",
+    "name": "Ja-Perm",
+    "algorithm": "y' R' U L' U2 R U' R' U2 R L",
+    "diagram": "  \u250c\u2500\u2500\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nCorners: UFR \u2194 UBR\nEdges:   UB  \u2194 UR"
+  },
+  {
+    "id": "Jb",
+    "name": "Jb-Perm",
+    "algorithm": "R U R' F' R U R' U' R' F R2 U' R' U'",
+    "diagram": "  \u250c\u2500\u2500\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nCorners: UFL \u2194 UFR\nEdges:   UF  \u2194 UR"
+  },
+  {
+    "id": "Na",
+    "name": "Na-Perm",
+    "algorithm": "R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'",
+    "diagram": "  A \u2194 B  \n  \u250c\u2500\u2500\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nCorners: UFL \u2194 UBR\nEdges:   UF  \u2194 UB"
+  },
+  {
+    "id": "Nb",
+    "name": "Nb-Perm",
+    "algorithm": "R' U L' U2 R U' L R' U L' U2 R U' L",
+    "diagram": "  A \u2194 B  \n  \u250c\u2500\u2500\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nCorners: UFR \u2194 UBL\nEdges:   UF  \u2194 UB"
+  },
+  {
+    "id": "Ra",
+    "name": "Ra-Perm",
+    "algorithm": "R U' R' U' R U R D R' U' R D' R' U2 R'",
+    "diagram": "  \u250c\u2500\u2500\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nCorners: UFL \u2194 UFR\nEdges:   UL  \u2194 UB"
+  },
+  {
+    "id": "Rb",
+    "name": "Rb-Perm",
+    "algorithm": "R' U2 R U2 R' F R U R' U' R' F' R2 U'",
+    "diagram": "  \u250c\u2500\u2500\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nCorners: UFL \u2194 UFR\nEdges:   UR  \u2194 UB"
+  },
+  {
+    "id": "T",
+    "name": "T-Perm",
+    "algorithm": "R U R' U' R' F R2 U' R' U' R U R' F'",
+    "diagram": "  \u250c\u2500\u2500\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nCorners: UFR \u2194 UBR\nEdges:   UL  \u2194 UR"
+  },
+  {
+    "id": "Ua",
+    "name": "Ua-Perm",
+    "algorithm": "R U' R U R U R U' R' U' R2",
+    "diagram": "    \u25b2    \n  \u250c\u2500\u253c\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nEdges: UF \u21bb UB \u21bb UR"
+  },
+  {
+    "id": "Ub",
+    "name": "Ub-Perm",
+    "algorithm": "R2 U R U R' U' R' U' R' U R'",
+    "diagram": "    \u25bc    \n  \u250c\u2500\u253c\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nEdges: UF \u21ba UR \u21ba UB"
+  },
+  {
+    "id": "V",
+    "name": "V-Perm",
+    "algorithm": "R' U R' U' y R' F' R2 U' R' U R' F R F",
+    "diagram": "  A \u2194 B  \n  \u250c\u2500\u2500\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nCorners: UFL \u2194 UBR\nEdges:   UF  \u2194 UR"
+  },
+  {
+    "id": "Y",
+    "name": "Y-Perm",
+    "algorithm": "F R U' R' U' R U R' F' R U R' U' R' F R F'",
+    "diagram": "  A \u2194 B  \n  \u250c\u2500\u2500\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nCorners: UFL \u2194 UBR\nEdges:   UF  \u2194 UR"
+  },
+  {
+    "id": "Z",
+    "name": "Z-Perm",
+    "algorithm": "M2 U M2 U M' U2 M2 U2 M' U2",
+    "diagram": "  \u250c\u2500\u2500\u2500\u2510  \n\u25c4\u2500\u253c\u2500\u2500\u2500\u253c\u2500\u25ba\n  \u2514\u2500\u2500\u2500\u2518  \nEdges: UF \u2194 UR, UL \u2194 UB"
+  }
+]

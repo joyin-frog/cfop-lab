@@ -1,0 +1,401 @@
+[
+  {
+    "id": "1",
+    "name": "Runway",
+    "group": "No Edges Oriented",
+    "algorithm": "R U2 R2 F R F' U2 R' F R F'",
+    "diagram": " ### \n#...#\n#.#.#\n#...#\n ### "
+  },
+  {
+    "id": "2",
+    "name": "Zamboni",
+    "group": "No Edges Oriented",
+    "algorithm": "F R U R' U' F' f R U R' U' f'",
+    "diagram": " ### \n#...#\n#.#.#\n#...#\n ### "
+  },
+  {
+    "id": "3",
+    "name": "Anti-Mouse",
+    "group": "No Edges Oriented",
+    "algorithm": "f R U R' U' f' U' F R U R' U' F'",
+    "diagram": " .## \n#....\n#.#.#\n#...#\n ### "
+  },
+  {
+    "id": "4",
+    "name": "Mouse",
+    "group": "No Edges Oriented",
+    "algorithm": "f R U R' U' f' U F R U R' U' F'",
+    "diagram": " ##. \n#...#\n#.#.#\n#....\n ### "
+  },
+  {
+    "id": "5",
+    "name": "Lefty Square",
+    "group": "Squares",
+    "algorithm": "r' U2 R U R' U r",
+    "diagram": " ..# \n.##.#\n.##.#\n#...#\n ### "
+  },
+  {
+    "id": "6",
+    "name": "Righty Square",
+    "group": "Squares",
+    "algorithm": "r U2 R' U' R U' r'",
+    "diagram": " #.. \n#.##.\n#.##.\n#...#\n ### "
+  },
+  {
+    "id": "7",
+    "name": "Fat Sune",
+    "group": "Lightning Bolts",
+    "algorithm": "r U R' U R U2 r'",
+    "diagram": " #.# \n#.#.#\n###.#\n.#..#\n .## "
+  },
+  {
+    "id": "8",
+    "name": "Fat Antisune",
+    "group": "Lightning Bolts",
+    "algorithm": "r' U' R U' R' U2 r",
+    "diagram": " #.# \n#.#.#\n#.###\n#..#.\n ##. "
+  },
+  {
+    "id": "9",
+    "name": "Kite",
+    "group": "Fish-Shapes",
+    "algorithm": "R U R' U' R' F R2 U R' U' F'",
+    "diagram": " .## \n.#..#\n#.#.#\n#..#.\n .## "
+  },
+  {
+    "id": "10",
+    "name": "Anti-Kite",
+    "group": "Fish-Shapes",
+    "algorithm": "R U R' U R' F R F' R U2 R'",
+    "diagram": " ##. \n#..##\n#.#.#\n.#...\n ##. "
+  },
+  {
+    "id": "11",
+    "name": "Downstairs",
+    "group": "Lightning Bolts",
+    "algorithm": "r U R' U R U' R' U R U2 r'",
+    "diagram": " #.# \n#.#.#\n###.#\n#.#.#\n #.. "
+  },
+  {
+    "id": "12",
+    "name": "Upstairs",
+    "group": "Lightning Bolts",
+    "algorithm": "M' U' M U2 M' U' M",
+    "diagram": " #.# \n#.#.#\n#.###\n#.#.#\n ..# "
+  },
+  {
+    "id": "13",
+    "name": "Gun",
+    "group": "Knight Move Shapes",
+    "algorithm": "r U' r' U' r U r' y' R' U R",
+    "diagram": " ..# \n##..#\n###.#\n#.#.#\n ##. "
+  },
+  {
+    "id": "14",
+    "name": "Anti-Gun",
+    "group": "Knight Move Shapes",
+    "algorithm": "R' F R U R' F' R y' R U' R'",
+    "diagram": " #.. \n#..##\n#.###\n#.#.#\n .## "
+  },
+  {
+    "id": "15",
+    "name": "Squeegee",
+    "group": "Knight Move Shapes",
+    "algorithm": "r' U' r R' U' R U r' U r",
+    "diagram": " ### \n#...#\n###.#\n.##.#\n .## "
+  },
+  {
+    "id": "16",
+    "name": "Anti-Squeegee",
+    "group": "Knight Move Shapes",
+    "algorithm": "r U r' R U R' U' r U' r'",
+    "diagram": " ### \n#...#\n#.###\n#.##.\n ##. "
+  },
+  {
+    "id": "17",
+    "name": "Slash",
+    "group": "No Edges Oriented",
+    "algorithm": "F R U R' U' F' U2 R' F R F'",
+    "diagram": " ### \n#...#\n#.#.#\n#...#\n ### "
+  },
+  {
+    "id": "18",
+    "name": "Crown",
+    "group": "No Edges Oriented",
+    "algorithm": "F R U R' U' y' R' U2 R' F R F'",
+    "diagram": " ### \n#...#\n#.#.#\n#...#\n ### "
+  },
+  {
+    "id": "19",
+    "name": "Bunny",
+    "group": "No Edges Oriented",
+    "algorithm": "M' U2 M U2 M' U M U2 M' U M",
+    "diagram": " ### \n#...#\n#.#.#\n#...#\n ### "
+  },
+  {
+    "id": "20",
+    "name": "Checkers",
+    "group": "No Edges Oriented",
+    "algorithm": "M U R U R' U' M2 U R U' r'",
+    "diagram": " ### \n#...#\n#.#.#\n#...#\n ### "
+  },
+  {
+    "id": "21",
+    "name": "Double Headlights",
+    "group": "All Edges Oriented",
+    "algorithm": "R U2 R' U' R U R' U' R U' R'",
+    "diagram": " #.# \n..#..\n.###.\n..#..\n #.# "
+  },
+  {
+    "id": "22",
+    "name": "Pi-Shape",
+    "group": "All Edges Oriented",
+    "algorithm": "R U2 R2 U' R2 U' R2 U2 R",
+    "diagram": " ... \n#.#.#\n.###.\n..#..\n #.# "
+  },
+  {
+    "id": "23",
+    "name": "Headlights",
+    "group": "All Edges Oriented",
+    "algorithm": "R2 D R' U2 R D' R' U2 R'",
+    "diagram": " #.# \n#.#..\n.###.\n#.#..\n ... "
+  },
+  {
+    "id": "24",
+    "name": "Hammerhead",
+    "group": "All Edges Oriented",
+    "algorithm": "r U R' U' r' F R F'",
+    "diagram": " #.. \n..#.#\n.###.\n#.#..\n #.. "
+  },
+  {
+    "id": "25",
+    "name": "Bowtie",
+    "group": "All Edges Oriented",
+    "algorithm": "F' r U R' U' r' F R",
+    "diagram": " #.. \n#.#.#\n.###.\n..#..\n ..# "
+  },
+  {
+    "id": "26",
+    "name": "Antisune",
+    "group": "All Edges Oriented",
+    "algorithm": "R U2 R' U' R U' R'",
+    "diagram": " #.. \n..##.\n.###.\n#.#..\n #.. "
+  },
+  {
+    "id": "27",
+    "name": "Sune",
+    "group": "All Edges Oriented",
+    "algorithm": "R U R' U R U2 R'",
+    "diagram": " #.. \n..#..\n.###.\n.##.#\n ..# "
+  },
+  {
+    "id": "28",
+    "name": "Stealth",
+    "group": "Corners Correct",
+    "algorithm": "r U R' U' M U R U' R'",
+    "diagram": " .#. \n.#.#.\n#.#.#\n.#.#.\n .#. "
+  },
+  {
+    "id": "57",
+    "name": "H-Shape",
+    "group": "Corners Correct",
+    "algorithm": "R U R' U' M' U R U' r'",
+    "diagram": " .#. \n.#.#.\n#.#.#\n.#.#.\n .#. "
+  },
+  {
+    "id": "29",
+    "name": "Spotted Chameleon",
+    "group": "Awkward Shapes",
+    "algorithm": "R2 U' R F R' U R2 U' R' F' R",
+    "diagram": " .## \n.#..#\n#####\n#..#.\n .#. "
+  },
+  {
+    "id": "30",
+    "name": "Anti-Spotted Chameleon",
+    "group": "Awkward Shapes",
+    "algorithm": "r' U' R U' R' U R U' R' U2 r",
+    "diagram": " ##. \n#..#.\n#####\n.#..#\n .#. "
+  },
+  {
+    "id": "41",
+    "name": "Awkward Fish",
+    "group": "Awkward Shapes",
+    "algorithm": "R U R' U R U2 R' F R U R' U' F'",
+    "diagram": " ..# \n###.#\n###.#\n#..##\n ### "
+  },
+  {
+    "id": "42",
+    "name": "Anti-Awkward Fish",
+    "group": "Awkward Shapes",
+    "algorithm": "R' U' R U' R' U2 R F R U R' U' F'",
+    "diagram": " #.. \n#.###\n#.###\n##..#\n ### "
+  },
+  {
+    "id": "31",
+    "name": "Couch",
+    "group": "P-Shapes",
+    "algorithm": "S R U R' U' f' U' F",
+    "diagram": " ..# \n.##.#\n.##.#\n###.#\n ..# "
+  },
+  {
+    "id": "32",
+    "name": "Anti-Couch",
+    "group": "P-Shapes",
+    "algorithm": "S R U R' U' R' F R f'",
+    "diagram": " #.. \n#.##.\n#.##.\n#.###\n #.. "
+  },
+  {
+    "id": "43",
+    "name": "Anti-P",
+    "group": "P-Shapes",
+    "algorithm": "F' U' L' U L F",
+    "diagram": " ..# \n.##.#\n.##.#\n##..#\n ### "
+  },
+  {
+    "id": "44",
+    "name": "P-Shape",
+    "group": "P-Shapes",
+    "algorithm": "F U R U' R' F'",
+    "diagram": " #.. \n#.##.\n#.##.\n#..##\n ### "
+  },
+  {
+    "id": "33",
+    "name": "Key",
+    "group": "T-Shapes",
+    "algorithm": "R U R' U' R' F R F'",
+    "diagram": " #.# \n..#..\n#.#.#\n.###.\n ... "
+  },
+  {
+    "id": "45",
+    "name": "T-Shape",
+    "group": "T-Shapes",
+    "algorithm": "F R U R' U' F'",
+    "diagram": " ... \n.###.\n#.#.#\n..#..\n #.# "
+  },
+  {
+    "id": "34",
+    "name": "City",
+    "group": "C-Shapes",
+    "algorithm": "R U R' U' B' R' F R F' B",
+    "diagram": " ... \n.###.\n.###.\n#...#\n ### "
+  },
+  {
+    "id": "46",
+    "name": "Seein' Headlights",
+    "group": "C-Shapes",
+    "algorithm": "R' U' R' F R F' U R",
+    "diagram": " ### \n#.#.#\n.###.\n.#.#.\n ... "
+  },
+  {
+    "id": "35",
+    "name": "Fish Salad",
+    "group": "Fish-Shapes",
+    "algorithm": "R U2 R2 F R F' U2 R' F R F'",
+    "diagram": " ..# \n.##.#\n..###\n##..#\n ##. "
+  },
+  {
+    "id": "37",
+    "name": "Mounted Fish",
+    "group": "Fish-Shapes",
+    "algorithm": "F R U' R' U' R U R' F'",
+    "diagram": " #.. \n#.###\n#.#.#\n.##.#\n ..# "
+  },
+  {
+    "id": "36",
+    "name": "Sea Mew",
+    "group": "W-Shapes",
+    "algorithm": "L' U' L U' L' U L U L F' L' F",
+    "diagram": " #.# \n#.#.#\n###.#\n.#.##\n ##. "
+  },
+  {
+    "id": "38",
+    "name": "Mario",
+    "group": "W-Shapes",
+    "algorithm": "R U R' U R U' R' U' R' F R F'",
+    "diagram": " #.# \n#.#..\n#.###\n##.##\n .## "
+  },
+  {
+    "id": "39",
+    "name": "Fung",
+    "group": "Lightning Bolts",
+    "algorithm": "L F' L' U' L U F U' L'",
+    "diagram": " #.# \n#.#.#\n###.#\n#..##\n ##. "
+  },
+  {
+    "id": "40",
+    "name": "Anti-Fung",
+    "group": "Lightning Bolts",
+    "algorithm": "R' F R U R' U' F' U R",
+    "diagram": " #.# \n#.#.#\n#.###\n##..#\n .## "
+  },
+  {
+    "id": "47",
+    "name": "Anti-Breakneck",
+    "group": "L-Shapes",
+    "algorithm": "F' L' U' L U L' U' L U F",
+    "diagram": " ..# \n.##.#\n.##.#\n#..##\n ### "
+  },
+  {
+    "id": "48",
+    "name": "Breakneck",
+    "group": "L-Shapes",
+    "algorithm": "F R U R' U R U' R' U' F'",
+    "diagram": " #.. \n#.##.\n#.##.\n##..#\n ### "
+  },
+  {
+    "id": "49",
+    "name": "Right Back Squeezy",
+    "group": "L-Shapes",
+    "algorithm": "r U' r' U' r U r' U' y L' U L",
+    "diagram": " #.# \n#.##.\n###.#\n.#..#\n .## "
+  },
+  {
+    "id": "50",
+    "name": "Right Front Squeezy",
+    "group": "L-Shapes",
+    "algorithm": "r' U r U r' U' r U y R U' R'",
+    "diagram": " #.# \n.##.#\n#.###\n#..#.\n ##. "
+  },
+  {
+    "id": "53",
+    "name": "Frying Pan",
+    "group": "L-Shapes",
+    "algorithm": "r' U' R U' R' U R U' R' U2 r",
+    "diagram": " .## \n.####\n###.#\n#....\n .## "
+  },
+  {
+    "id": "54",
+    "name": "Anti-Frying Pan",
+    "group": "L-Shapes",
+    "algorithm": "r U R' U R U' R' U R U2 r'",
+    "diagram": " ##. \n#####\n#.###\n.....\n ##. "
+  },
+  {
+    "id": "51",
+    "name": "Bottlecap",
+    "group": "I-Shapes",
+    "algorithm": "f R U R' U' f' U' F R U R' U' F'",
+    "diagram": " ..# \n###.#\n#.#.#\n#.###\n #.. "
+  },
+  {
+    "id": "52",
+    "name": "Rice Cooker",
+    "group": "I-Shapes",
+    "algorithm": "R' U' R U' R' U y' R' U R B",
+    "diagram": " #.. \n#.###\n#.#.#\n###.#\n ..# "
+  },
+  {
+    "id": "55",
+    "name": "Highway",
+    "group": "I-Shapes",
+    "algorithm": "y R' F R U R U' R2' F' R2 U' R' U R U R'",
+    "diagram": " #.# \n#.#.#\n..#..\n#.#.#\n #.# "
+  },
+  {
+    "id": "56",
+    "name": "Streetlights",
+    "group": "I-Shapes",
+    "algorithm": "r U r' U R U' R' U R U' R' r U' r'",
+    "diagram": " #.# \n#.#.#\n..#..\n#.#.#\n #.# "
+  }
+]

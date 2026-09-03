@@ -1,0 +1,309 @@
+[
+  {
+    "id": 1,
+    "group": "Basic Insert",
+    "algorithms": [
+      "U (R U' R')"
+    ]
+  },
+  {
+    "id": 2,
+    "group": "Basic Insert",
+    "algorithms": [
+      "y' U' (R' U R)",
+      "y U' (L' U L)"
+    ]
+  },
+  {
+    "id": 3,
+    "group": "Basic Insert",
+    "algorithms": [
+      "y' (R' U' R)",
+      "y (L' U' L)"
+    ]
+  },
+  {
+    "id": 4,
+    "group": "Basic Insert",
+    "algorithms": [
+      "(R U R')"
+    ]
+  },
+  {
+    "id": 5,
+    "group": "Different Facing Up",
+    "algorithms": [
+      "U' (R U' R' U) y' (R' U' R)",
+      "y' U (R' U' R U') (R' U' R)"
+    ]
+  },
+  {
+    "id": 6,
+    "group": "Different Facing Up",
+    "algorithms": [
+      "U' (R U R' U) (R U R')"
+    ]
+  },
+  {
+    "id": 7,
+    "group": "Different Facing Up",
+    "algorithms": [
+      "U' (R U2' R' U) y' (R' U' R)",
+      "U' (R U2' R') d (R' U' R)"
+    ]
+  },
+  {
+    "id": 8,
+    "group": "Different Facing Up",
+    "algorithms": [
+      "R' U2' R2 U R2' U R",
+      "y' U (R' U2 R) U' y (R U R')",
+      "(R U' R' U) (R U' R') U2 (R U' R')"
+    ]
+  },
+  {
+    "id": 9,
+    "group": "Different Facing Up",
+    "algorithms": [
+      "y' U (R' U R U') (R' U' R)"
+    ]
+  },
+  {
+    "id": 10,
+    "group": "Different Facing Up",
+    "algorithms": [
+      "U' (R U' R' U) (R U R')"
+    ]
+  },
+  {
+    "id": 11,
+    "group": "Same Facing Up",
+    "algorithms": [
+      "(U' R U R') U2 (R U' R')"
+    ]
+  },
+  {
+    "id": 12,
+    "group": "Same Facing Up",
+    "algorithms": [
+      "y' (U R' U' R) U2' (R' U R)",
+      "d (R' U' R) U2' (R' U R)"
+    ]
+  },
+  {
+    "id": 13,
+    "group": "Same Facing Up",
+    "algorithms": [
+      "U' (R U2' R') U2 (R U' R')"
+    ]
+  },
+  {
+    "id": 14,
+    "group": "Same Facing Up",
+    "algorithms": [
+      "y' U (R' U2 R) U2' (R' U R)",
+      "d (R' U2 R) U2' (R' U R)"
+    ]
+  },
+  {
+    "id": 15,
+    "group": "White Facing Up",
+    "algorithms": [
+      "U (R U2 R') U (R U' R')"
+    ]
+  },
+  {
+    "id": 16,
+    "group": "White Facing Up",
+    "algorithms": [
+      "y' U' (R' U2 R) U' (R' U R)"
+    ]
+  },
+  {
+    "id": 17,
+    "group": "White Facing Up",
+    "algorithms": [
+      "U2 (R U R' U) (R U' R')",
+      "(R U' R') U2 (R U R')"
+    ]
+  },
+  {
+    "id": 18,
+    "group": "White Facing Up",
+    "algorithms": [
+      "y' U2 (R' U' R) U' (R' U R)"
+    ]
+  },
+  {
+    "id": 19,
+    "group": "Incorrectly Connected",
+    "algorithms": [
+      "y' (R' U R) U2' y (R U R')",
+      "(R U R') U2 (R U' R' U) (R U' R')"
+    ]
+  },
+  {
+    "id": 20,
+    "group": "Incorrectly Connected",
+    "algorithms": [
+      "(R U' R' U2) y' (R' U' R)",
+      "U F (R U R' U') F' (U R U' R')"
+    ]
+  },
+  {
+    "id": 21,
+    "group": "Incorrectly Connected",
+    "algorithms": [
+      "(R U2 R') U' (R U R')"
+    ]
+  },
+  {
+    "id": 22,
+    "group": "Incorrectly Connected",
+    "algorithms": [
+      "y' (R' U2 R) U (R' U' R)"
+    ]
+  },
+  {
+    "id": 23,
+    "group": "Incorrectly Connected",
+    "algorithms": [
+      "U (R U' R' U') (R U' R' U) (R U' R')",
+      "(R U R' U2') (R U R' U') (R U R')"
+    ]
+  },
+  {
+    "id": 24,
+    "group": "Incorrectly Connected",
+    "algorithms": [
+      "y' U' (R' U R U) (R' U R U') (R' U R)",
+      "F (U R U' R') F' (R U' R')"
+    ]
+  },
+  {
+    "id": 25,
+    "group": "Corner In Edge Out",
+    "algorithms": [
+      "U' F' (R U R' U') R' F R",
+      "R' F' R U (R U' R') F"
+    ]
+  },
+  {
+    "id": 26,
+    "group": "Corner In Edge Out",
+    "algorithms": [
+      "U (R U' R') U' (F' U F)",
+      "U (R U' R') (F R' F' R)"
+    ]
+  },
+  {
+    "id": 27,
+    "group": "Corner In Edge Out",
+    "algorithms": [
+      "(R U' R' U) (R U' R')"
+    ]
+  },
+  {
+    "id": 28,
+    "group": "Corner In Edge Out",
+    "algorithms": [
+      "y' (R' U R U') (R' U R)"
+    ]
+  },
+  {
+    "id": 29,
+    "group": "Corner In Edge Out",
+    "algorithms": [
+      "y' (R' U' R U) (R' U' R)",
+      "(R' F R F') U (R U' R')"
+    ]
+  },
+  {
+    "id": 30,
+    "group": "Corner In Edge Out",
+    "algorithms": [
+      "(R U R' U') (R U R')"
+    ]
+  },
+  {
+    "id": 31,
+    "group": "Edge In Corner Out",
+    "algorithms": [
+      "(R U' R' U) y' (R' U R)",
+      "U' (R' F R F') (R U' R')"
+    ]
+  },
+  {
+    "id": 32,
+    "group": "Edge In Corner Out",
+    "algorithms": [
+      "(U R U' R') (U R U' R') (U R U' R')"
+    ]
+  },
+  {
+    "id": 33,
+    "group": "Edge In Corner Out",
+    "algorithms": [
+      "(U' R U' R') U2 (R U' R')"
+    ]
+  },
+  {
+    "id": 34,
+    "group": "Edge In Corner Out",
+    "algorithms": [
+      "U (R U R') U2 (R U R')"
+    ]
+  },
+  {
+    "id": 35,
+    "group": "Edge In Corner Out",
+    "algorithms": [
+      "(U' R U R') U y' (R' U' R)"
+    ]
+  },
+  {
+    "id": 36,
+    "group": "Edge In Corner Out",
+    "algorithms": [
+      "U (F' U' F) U' (R U R')"
+    ]
+  },
+  {
+    "id": 37,
+    "group": "Both In Slot",
+    "algorithms": [
+      "(R U' R') d (R' U2 R) U2' (R' U R)"
+    ]
+  },
+  {
+    "id": 38,
+    "group": "Both In Slot",
+    "algorithms": [
+      "(R U' R' U') R U R' U2 (R U' R')",
+      "(R U R' U') R U2 R' U' (R U R')"
+    ]
+  },
+  {
+    "id": 39,
+    "group": "Both In Slot",
+    "algorithms": [
+      "(R U' R' U) (R U2' R') U (R U' R')",
+      "(R U R') U2' (R U' R' U) (R U R')"
+    ]
+  },
+  {
+    "id": 40,
+    "group": "Both In Slot",
+    "algorithms": [
+      "(F' U F) U2 (R U R' U) (R U' R')",
+      "(R U' R') F (R U R' U') F' (R U' R')"
+    ]
+  },
+  {
+    "id": 41,
+    "group": "Both In Slot",
+    "algorithms": [
+      "(R U R' U') (R U' R') U2 y' (R' U' R)"
+    ]
+  }
+]

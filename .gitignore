@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.pnpm-store/
+.playwright-cli/
+.DS_Store
+*.log
