@@ -49,6 +49,7 @@ export function CatalogActions({
   onSelectResult,
   activeFilterCount,
   onOpenFilters,
+  accountAction,
 }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const searchPanelRef = useRef(null);
@@ -157,6 +158,8 @@ export function CatalogActions({
           )}
         </form>
       </div>
+
+      {accountAction}
 
       {stage !== "cross" && (
         <button

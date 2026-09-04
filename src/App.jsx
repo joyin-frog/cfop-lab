@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { BookOpen, CalendarDays, ChevronDown, Copy, Dumbbell, Filter, Info, Menu, Search, Settings2, Shuffle, Star, Target, X } from "lucide-react";
 import { CaseCard } from "./components/CaseCard";
 import { CaseDialog } from "./components/CaseDialog";
@@ -6,8 +6,11 @@ import { CaseTrainerDialog } from "./components/CaseTrainerDialog";
 import { CatalogActions, CatalogSort, MobileFilterSheet } from "./components/CatalogControls";
 import { DailyReviewDialog } from "./components/DailyReviewDialog";
 import { LearningPathBanner } from "./components/LearningPathBanner";
+import { AccountDialog } from "./components/AccountDialog";
 import { casesByStage, crossLessons, stageMeta } from "./data/cfopData";
 import { compareLearningOrder, learningPaths } from "./data/learningPath";
+import { useCloudLearning } from "./hooks/useCloudLearning";
+import { touchLocalLearningState } from "./lib/learningState";
 import { completeReview, isReviewDue, markMastered, progressStatus, rateReview, startLearning } from "./lib/progress";
 import { compareProbability } from "./lib/probability";
 import { searchCases } from "./lib/search";
@@ -41,6 +44,12 @@ export default function App() {
   const [reviewHistory, setReviewHistory] = useState(() => loadArray("cfop-lab-review-history"));
   const [reviewComplete, setReviewComplete] = useState(false);
   const [trainingSession, setTrainingSession] = useState(null);
+  const hydrateLearningState = useCallback((state) => {
+    setProgress(state.progress);
+    setFavorites(state.favorites);
+    setReviewHistory(state.reviewHistory);
+  }, []);
+  const cloud = useCloudLearning({ progress, favorites, reviewHistory, onHydrate: hydrateLearningState });
   const cases = casesByStage[stage] || [];
   const groups = useMemo(() => [...new Set(cases.map((item) => item.group))], [cases]);
   const globalSearchResults = useMemo(() => searchCases(ALL_CASES, query, stageMeta), [query]);
@@ -96,7 +105,7 @@ export default function App() {
     if (stage === "cross") { alert("训练建议：打乱魔方后不限时观察，闭眼口述四条白棱的顺序，再连续完成十字。"); return; }
     if (item) setSelected(item);
   }
-  function updateProgress(item, updater) { const key = progressKey(item); setProgress((current) => { const next = { ...current, [key]: updater(current[key]) }; localStorage.setItem("cfop-lab-progress", JSON.stringify(next)); return next; }); }
+  function updateProgress(item, updater) { const key = progressKey(item); touchLocalLearningState(); setProgress((current) => { const next = { ...current, [key]: updater(current[key]) }; localStorage.setItem("cfop-lab-progress", JSON.stringify(next)); return next; }); }
   function addToLearning(item) { updateProgress(item, startLearning); }
   function setMastered(item) { updateProgress(item, markMastered); }
   function finishReview(item) { updateProgress(item, completeReview); }
@@ -114,6 +123,7 @@ export default function App() {
     }
     const today = localDateKey();
     const nextHistory = [...new Set([...reviewHistory, today])];
+    touchLocalLearningState();
     localStorage.setItem("cfop-lab-review-history", JSON.stringify(nextHistory));
     localStorage.setItem("cfop-lab-review-dismissed", today);
     setReviewHistory(nextHistory);
@@ -130,7 +140,7 @@ export default function App() {
     setTrainingSession({ id: Date.now(), items: pool, mode, title });
   }
   function rateTraining(item, rating) { updateProgress(item, (value) => rateReview(value, rating)); }
-  function toggleFavorite(item) { const key = progressKey(item); setFavorites((current) => { const next = { ...current, [key]: !current[key] }; localStorage.setItem("cfop-lab-favorites", JSON.stringify(next)); return next; }); }
+  function toggleFavorite(item) { const key = progressKey(item); touchLocalLearningState(); setFavorites((current) => { const next = { ...current, [key]: !current[key] }; localStorage.setItem("cfop-lab-favorites", JSON.stringify(next)); return next; }); }
   async function copyAlgorithm(item) { await navigator.clipboard.writeText(item.algorithm); setCopied(progressKey(item)); window.setTimeout(() => setCopied(""), 1200); }
 
   return <div className="app-shell">
@@ -147,6 +157,7 @@ export default function App() {
         onSelectResult={openGlobalSearchResult}
         activeFilterCount={activeFilterCount}
         onOpenFilters={() => setMobileFilters(true)}
+        accountAction={<AccountDialog cloud={cloud} />}
       />
     </header>
 
@@ -187,7 +198,7 @@ export default function App() {
           <div className="catalog-title" id="catalog-results"><div><span>ALGORITHM CATALOG</span><h2>{meta.subtitle}</h2></div><div className="catalog-summary"><b>{visible.length}</b><span>当前显示</span></div></div>
           {grouped.length ? grouped.map(({ group, description, items }) => <section className="case-group" key={group}><div className="group-heading"><div><h3>{group}</h3>{description && <p>{description}</p>}</div><span>{items.length} CASES</span></div><div className="case-grid">{items.map((item) => { const entry = progress[progressKey(item)]; return <CaseCard key={progressKey(item)} item={item} status={progressStatus(entry)} reviewDue={isReviewDue(entry)} favorite={favorites[progressKey(item)]} onOpen={() => setSelected(item)} onAddToLearning={() => addToLearning(item)} onMarkMastered={() => setMastered(item)} onToggleFavorite={() => toggleFavorite(item)} onCopy={() => copyAlgorithm(item)} />; })}</div></section>) : <div className="empty-state"><Search /><strong>没有符合筛选的案例</strong><p>换一个分组或清除筛选试试。</p></div>}
         </>}
-        <footer className="site-footer"><div><Logo small /><strong>CFOP LAB</strong></div><p>进度只保存在当前浏览器 · <a href="/THIRD_PARTY_NOTICES.txt" target="_blank" rel="noreferrer">第三方许可</a></p></footer>
+        <footer className="site-footer"><div><Logo small /><strong>CFOP LAB</strong></div><p>{cloud.user ? "本机保存 · 云端已连接" : "本机保存 · 登录后跨设备同步"} · <a href="/THIRD_PARTY_NOTICES.txt" target="_blank" rel="noreferrer">第三方许可</a></p></footer>
       </main>
     </div>
     {copied && <div className="toast"><Copy />公式已复制</div>}

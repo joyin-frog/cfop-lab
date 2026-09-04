@@ -23,6 +23,7 @@ export function startLearning(value, now = Date.now()) {
     ...entry,
     status: "learning",
     startedAt: entry.startedAt || now,
+    updatedAt: now,
     reviewAt: null,
   };
 }
@@ -33,6 +34,7 @@ export function markMastered(value, now = Date.now()) {
     ...entry,
     status: "mastered",
     masteredAt: now,
+    updatedAt: now,
     reviewLevel: 0,
     reviewAt: now + REVIEW_INTERVALS_DAYS[0] * DAY_MS,
   };
@@ -46,6 +48,7 @@ export function completeReview(value, now = Date.now()) {
     status: "mastered",
     reviewLevel,
     reviewedAt: now,
+    updatedAt: now,
     reviewAt: now + REVIEW_INTERVALS_DAYS[reviewLevel] * DAY_MS,
   };
 }
@@ -57,6 +60,7 @@ export function rateReview(value, rating, now = Date.now()) {
     return {
       ...startLearning(entry, now),
       reviewedAt: now,
+      updatedAt: now,
       lastReviewRating: rating,
     };
   }
@@ -66,6 +70,7 @@ export function rateReview(value, rating, now = Date.now()) {
       return {
         ...startLearning(entry, now),
         reviewedAt: now,
+        updatedAt: now,
         lastReviewRating: rating,
       };
     }
@@ -74,6 +79,7 @@ export function rateReview(value, rating, now = Date.now()) {
     return {
       ...entry,
       reviewedAt: now,
+      updatedAt: now,
       lastReviewRating: rating,
       reviewAt: now + nextDays * DAY_MS,
     };
