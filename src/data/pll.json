@@ -2,7 +2,7 @@
   {
     "id": "Aa",
     "name": "Aa-Perm",
-    "algorithm": "x' R' U R' D2 R U' R' D2 R2 x",
+    "algorithm": "x R' U R' D2 R U' R' D2 R2 x'",
     "diagram": "  A   B  \n  \u250c\u2500\u2500\u2500\u2510  \n  \u2502 \u2588 \u2502  \n  \u2514\u2500\u2500\u2500\u2518  \nCorners: UBR \u21bb UFL \u21bb UFR"
   },
   {

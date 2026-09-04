@@ -4,7 +4,7 @@ This project includes or adapts data and software from:
 
 - [CubeCLI](https://github.com/Axzo001/CubeCLI), OLL and PLL algorithm data, MIT License, copyright 2026 CubeCLI Contributors.
 - [Cube Coach](https://github.com/lukejacksonn/cube), F2L algorithm data. Its README declares the project MIT licensed.
-- [cubing.js](https://github.com/cubing/cubing.js), used at build time to generate cube-state SVG diagrams under its published open-source licenses.
+- [cubing.js](https://github.com/cubing/cubing.js), used at build time to generate cube-state SVG diagrams and at runtime for algorithm inversion and interactive 3D playback, under its published open-source licenses.
 
 The CubeCLI MIT license text is reproduced below.
 

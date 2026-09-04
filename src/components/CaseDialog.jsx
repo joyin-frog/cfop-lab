@@ -40,7 +40,6 @@ export function CaseDialog({ item, progress, reviewSession, open, onOpenChange, 
             <section className="lesson-panel">
               <Dialog.Title>{item.name}</Dialog.Title>
               <Dialog.Description>{item.alias}{formatProbability(item) && <span className="dialog-probability">出现概率 {formatProbability(item)}</span>}</Dialog.Description>
-              <p className="lesson-lead">{item.recognition}</p>
 
               <div className="recognition-grid"><div><span>识别</span><p>{item.recognition}</p></div><div><span>拿法</span><p>{item.hold}</p></div></div>
 

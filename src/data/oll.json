@@ -73,14 +73,14 @@
     "id": "11",
     "name": "Downstairs",
     "group": "Lightning Bolts",
-    "algorithm": "r U R' U R U' R' U R U2 r'",
+    "algorithm": "r' R2 U R' U R U2 R' U M'",
     "diagram": " #.# \n#.#.#\n###.#\n#.#.#\n #.. "
   },
   {
     "id": "12",
     "name": "Upstairs",
     "group": "Lightning Bolts",
-    "algorithm": "M' U' M U2 M' U' M",
+    "algorithm": "r R2 U' R U' R' U2 R U' r' R",
     "diagram": " #.# \n#.#.#\n#.###\n#.#.#\n ..# "
   },
   {
@@ -115,21 +115,21 @@
     "id": "17",
     "name": "Slash",
     "group": "No Edges Oriented",
-    "algorithm": "F R U R' U' F' U2 R' F R F'",
+    "algorithm": "R U R' U R' F R F' U2 R' F R F'",
     "diagram": " ### \n#...#\n#.#.#\n#...#\n ### "
   },
   {
     "id": "18",
     "name": "Crown",
     "group": "No Edges Oriented",
-    "algorithm": "F R U R' U' y' R' U2 R' F R F'",
+    "algorithm": "r U R' U R U2 r2 U' R U' R' U2 r",
     "diagram": " ### \n#...#\n#.#.#\n#...#\n ### "
   },
   {
     "id": "19",
     "name": "Bunny",
     "group": "No Edges Oriented",
-    "algorithm": "M' U2 M U2 M' U M U2 M' U M",
+    "algorithm": "r' R U R U R' U' r R2 F R F'",
     "diagram": " ### \n#...#\n#.#.#\n#...#\n ### "
   },
   {
@@ -213,7 +213,7 @@
     "id": "30",
     "name": "Anti-Spotted Chameleon",
     "group": "Awkward Shapes",
-    "algorithm": "r' U' R U' R' U R U' R' U2 r",
+    "algorithm": "F U R U2 R' U' R U2 R' U' F'",
     "diagram": " ##. \n#..#.\n#####\n.#..#\n .#. "
   },
   {
@@ -290,7 +290,7 @@
     "id": "35",
     "name": "Fish Salad",
     "group": "Fish-Shapes",
-    "algorithm": "R U2 R2 F R F' U2 R' F R F'",
+    "algorithm": "R U2 R2 F R F' R U2 R'",
     "diagram": " ..# \n.##.#\n..###\n##..#\n ##. "
   },
   {
@@ -339,21 +339,21 @@
     "id": "48",
     "name": "Breakneck",
     "group": "L-Shapes",
-    "algorithm": "F R U R' U R U' R' U' F'",
+    "algorithm": "F R U R' U' R U R' U' F'",
     "diagram": " #.. \n#.##.\n#.##.\n##..#\n ### "
   },
   {
     "id": "49",
     "name": "Right Back Squeezy",
     "group": "L-Shapes",
-    "algorithm": "r U' r' U' r U r' U' y L' U L",
+    "algorithm": "r U' r2 U r2 U r2 U' r",
     "diagram": " #.# \n#.##.\n###.#\n.#..#\n .## "
   },
   {
     "id": "50",
     "name": "Right Front Squeezy",
     "group": "L-Shapes",
-    "algorithm": "r' U r U r' U' r U y R U' R'",
+    "algorithm": "r' U r2 U' r2 U' r2 U r'",
     "diagram": " #.# \n.##.#\n#.###\n#..#.\n ##. "
   },
   {
@@ -374,7 +374,7 @@
     "id": "51",
     "name": "Bottlecap",
     "group": "I-Shapes",
-    "algorithm": "f R U R' U' f' U' F R U R' U' F'",
+    "algorithm": "F U R U' R' U R U' R' F'",
     "diagram": " ..# \n###.#\n#.#.#\n#.###\n #.. "
   },
   {

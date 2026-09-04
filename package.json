@@ -1,24 +1,32 @@
 {
-  "name": "huangding-lab",
+  "name": "cfop-lab",
   "private": true,
   "version": "0.1.0",
   "type": "module",
   "packageManager": "pnpm@11.21.0",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "vite",
     "generate:diagrams": "node scripts/generate-cfop-svg.mjs",
     "build": "pnpm generate:diagrams && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node --test tests/*.test.mjs",
+    "check": "pnpm test && pnpm build"
   },
   "dependencies": {
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/geist-mono": "^5.3.0",
     "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-select": "^2.3.7",
+    "cubing": "^0.63.3",
     "lucide-react": "^0.542.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.0.2",
-    "cubing": "^0.63.3",
     "vite": "^7.1.3"
   }
 }

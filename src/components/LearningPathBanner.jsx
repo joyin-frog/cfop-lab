@@ -26,6 +26,7 @@ export function LearningPathBanner({ stage, path, cases, progress, onContinue })
         {path.prerequisite && <small><Sparkles />{path.prerequisite}</small>}
       </div>
 
+      <small className="learning-path-scroll-hint">左右滑动查看完整路线</small>
       <div className="learning-milestones">
         {stats.map((milestone, index) => {
           const active = milestone === current || (!current && index === stats.length - 1);

@@ -4,9 +4,8 @@ export function probabilityPercent(item) {
 }
 
 export function formatProbability(item) {
-  const percent = probabilityPercent(item);
-  if (percent === null) return null;
-  return `1/${item.probabilityDenominator} · ${percent.toFixed(2)}%`;
+  if (!item?.probabilityDenominator) return null;
+  return `1/${item.probabilityDenominator}`;
 }
 
 export function compareProbability(first, second) {

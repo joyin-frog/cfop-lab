@@ -1,35 +1,50 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import "cubing/twisty";
 import { invertAlgorithm } from "../lib/algorithms";
 
 const MOVE_SETTLE_DELAY = 40;
+let twistyModulePromise;
+
+function loadTwistyPlayer() {
+  twistyModulePromise ||= import("cubing/twisty");
+  return twistyModulePromise;
+}
 
 export function AnimatedCube({ algorithm, label, compact = false }) {
   const playerRef = useRef(null);
   const previewTimerRef = useRef(null);
   const previewRunRef = useRef(0);
   const [ready, setReady] = useState(false);
+  const [loadError, setLoadError] = useState(false);
   const [activeMove, setActiveMove] = useState(-1);
   const moves = useMemo(() => algorithm.trim().split(/\s+/).filter(Boolean), [algorithm]);
   const setupAlgorithm = useMemo(() => `z2 ${invertAlgorithm(algorithm)}`, [algorithm]);
 
   useEffect(() => {
+    let cancelled = false;
     setReady(false);
+    setLoadError(false);
     setActiveMove(-1);
-    const player = playerRef.current;
     const readyTimer = window.setTimeout(async () => {
-      if (!player) return;
-      player.jumpToStart({ flash: false });
-      setReady(true);
-    }, 120);
+      try {
+        await loadTwistyPlayer();
+        await window.customElements.whenDefined("twisty-player");
+        const player = playerRef.current;
+        if (cancelled || !player) return;
+        player.jumpToStart({ flash: false });
+        setReady(true);
+      } catch {
+        if (!cancelled) setLoadError(true);
+      }
+    }, 80);
 
     return () => {
+      cancelled = true;
       window.clearTimeout(readyTimer);
       previewRunRef.current += 1;
       window.clearTimeout(previewTimerRef.current);
       playerRef.current?.pause();
     };
-  }, [algorithm, label]);
+  }, [algorithm]);
 
   async function previewMove(index) {
     const player = playerRef.current;
@@ -102,7 +117,7 @@ export function AnimatedCube({ algorithm, label, compact = false }) {
             experimental-drag-input="auto"
           />
         </div>
-        {!ready && <span className="cube-loading">正在准备 3D 魔方…</span>}
+        {!ready && <span className="cube-loading">{loadError ? "3D 魔方加载失败，请刷新重试。" : "正在准备 3D 魔方…"}</span>}
       </div>
 
       {!compact && <div className="formula-scrubber">

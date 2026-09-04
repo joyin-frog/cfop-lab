@@ -1,0 +1,9 @@
+CFOP LAB — Third-party notices
+
+This project includes or adapts data and software from:
+
+- CubeCLI (https://github.com/Axzo001/CubeCLI): OLL and PLL algorithm data, MIT License, copyright 2026 CubeCLI Contributors.
+- Cube Coach (https://github.com/lukejacksonn/cube): F2L algorithm data. Its README declares the project MIT licensed.
+- cubing.js (https://github.com/cubing/cubing.js): build-time cube-state SVG generation, algorithm inversion, and interactive 3D playback, under its published open-source licenses.
+
+The full license notices are maintained in THIRD_PARTY_NOTICES.md in the source repository.
