@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowDownWideNarrow, BookOpen, CalendarDays, ChevronDown, Copy, Filter, Info, Menu, Search, Settings2, Shuffle, Sparkles, Star, Target, X } from "lucide-react";
+import { ArrowDownWideNarrow, BookOpen, CalendarDays, ChevronDown, Copy, Dumbbell, Filter, Info, Menu, Search, Settings2, Shuffle, Sparkles, Star, Target, X } from "lucide-react";
 import { CaseCard } from "./components/CaseCard";
 import { CaseDialog } from "./components/CaseDialog";
+import { CaseTrainerDialog } from "./components/CaseTrainerDialog";
 import { CatalogActions, MobileFilterSheet } from "./components/CatalogControls";
 import { DailyReviewDialog } from "./components/DailyReviewDialog";
 import { LearningPathBanner } from "./components/LearningPathBanner";
@@ -38,6 +39,7 @@ export default function App() {
   const [reviewSession, setReviewSession] = useState(null);
   const [reviewHistory, setReviewHistory] = useState(() => loadArray("cfop-lab-review-history"));
   const [reviewComplete, setReviewComplete] = useState(false);
+  const [trainingSession, setTrainingSession] = useState(null);
   const cases = casesByStage[stage] || [];
   const groups = useMemo(() => [...new Set(cases.map((item) => item.group))], [cases]);
   const visible = useMemo(() => {
@@ -61,6 +63,7 @@ export default function App() {
   const dailyReviewItems = [...allReviewItems, ...allLearningItems].slice(0, DAILY_LIMIT);
   const dailyDueCount = dailyReviewItems.filter((item) => isReviewDue(progress[progressKey(item)])).length;
   const dailyLearningCount = dailyReviewItems.length - dailyDueCount;
+  const trainingItems = [...allReviewItems, ...allLearningItems];
   const grouped = sortOrder === "learning"
     ? learningPaths[stage].milestones.map((milestone) => ({ group: milestone.title, description: milestone.description, items: visible.filter((item) => milestone.caseIds?.includes(item.id)) })).filter((entry) => entry.items.length)
     : sortOrder === "default"
@@ -117,6 +120,14 @@ export default function App() {
     setReviewComplete(true);
     window.setTimeout(() => setReviewComplete(false), 2200);
   }
+  function startTraining(items, mode, title) {
+    const pool = items.filter(Boolean);
+    if (!pool.length) return;
+    setSelected(null);
+    setReviewSession(null);
+    setTrainingSession({ id: Date.now(), items: pool, mode, title });
+  }
+  function rateTraining(item, rating) { updateProgress(item, (value) => rateReview(value, rating)); }
   function toggleFavorite(item) { const key = progressKey(item); setFavorites((current) => { const next = { ...current, [key]: !current[key] }; localStorage.setItem("cfop-lab-favorites", JSON.stringify(next)); return next; }); }
   async function copyAlgorithm(item) { await navigator.clipboard.writeText(item.algorithm); setCopied(progressKey(item)); window.setTimeout(() => setCopied(""), 1200); }
 
@@ -144,7 +155,8 @@ export default function App() {
           <div className="sidebar-block"><p><Filter />学习状态</p><div className="filter-chips">{STATUS_FILTERS.map((item) => <button className={statusFilter === item.id ? "is-active" : ""} type="button" key={item.id} onClick={() => setStatusFilter(item.id)}>{item.id === "favorite" && <Star />}{item.label}</button>)}</div></div>
           <div className="sidebar-block category-list"><p><ChevronDown />形状分组</p><button className={category === "all" ? "is-active" : ""} type="button" onClick={() => setCategory("all")}><span>全部案例</span><b>{cases.length}</b></button>{groups.map((group) => <button className={category === group ? "is-active" : ""} type="button" key={group} onClick={() => setCategory(group)}><span>{group}</span><b>{cases.filter((item) => item.group === group).length}</b></button>)}</div>
           <button className="drill-button study-drill" type="button" onClick={() => setDailyReviewOpen(true)}><CalendarDays /><span><strong>每日回顾</strong><small>{dailyReviewItems.length ? `${dailyReviewItems.length} 个公式 · 约 ${Math.max(1, Math.ceil(dailyReviewItems.length * .65))} 分钟` : "今天没有待回顾公式"}</small></span></button>
-          <button className="random-drill-button" type="button" onClick={() => setSelected(visible[Math.floor(Math.random() * visible.length)] || cases[0])}><Shuffle />随机抽取当前结果</button>
+          <button className="queue-drill-button" type="button" disabled={!trainingItems.length} onClick={() => startTraining(trainingItems, "queue", "学习清单抽题")}><Dumbbell /><span><strong>训练学习清单</strong><small>{trainingItems.length ? `${trainingItems.length} 个待练案例` : "先把案例加入学习清单"}</small></span></button>
+          <button className="random-drill-button" type="button" disabled={!visible.length} onClick={() => startTraining(visible, "queue", "当前筛选训练")}><Shuffle />训练当前筛选 · {visible.length}</button>
           <div className="mini-grid">{visible.slice(0, 24).map((item) => <button type="button" key={progressKey(item)} onClick={() => setSelected(item)}><img src={`/diagrams/${stage}-${item.id.toLowerCase()}.svg`} alt="" /><span>{item.id}</span></button>)}</div>
         </> : <div className="sidebar-note"><Target /><strong>十字不靠公式表</strong><p>这一步重点是观察、步数和连续执行。先把无限观察做到 8 步内，再压缩进 15 秒。</p></div>}
       </aside>
@@ -160,6 +172,7 @@ export default function App() {
         <LearningPathBanner stage={stage} path={learningPaths[stage]} cases={cases} progress={progress} onContinue={continueLearning} />
         {stage === "cross" ? <CrossSection /> : <>
           {dailyReviewItems.length > 0 && <button className="mobile-practice-button" type="button" onClick={() => setDailyReviewOpen(true)}><CalendarDays /><span><strong>打开每日回顾</strong><small>{dailyReviewItems.length} 个案例</small></span></button>}
+          {trainingItems.length > 0 && <button className="mobile-practice-button mobile-training-button" type="button" onClick={() => startTraining(trainingItems, "queue", "学习清单抽题")}><Dumbbell /><span><strong>训练学习清单</strong><small>{trainingItems.length} 个案例</small></span></button>}
           {(query || activeFilterCount > 0) && <div className="active-catalog-filters"><span>已应用 {Number(Boolean(query)) + activeFilterCount} 项条件</span><button type="button" onClick={() => { setQuery(""); setStatusFilter("all"); setCategory("all"); }}>清除全部</button></div>}
           <div className="catalog-orderbar">
             <p><Info />{stage === "f2l" ? "F2L 的实战频率取决于解槽顺序，不展示伪精确概率。" : `基于随机合法 ${stage.toUpperCase()} 状态的理论概率，统计包含跳过情况。`}</p>
@@ -187,7 +200,8 @@ export default function App() {
       onReset={() => { setStatusFilter("all"); setCategory("all"); }}
     />
     <DailyReviewDialog open={dailyReviewOpen} items={dailyReviewItems} dueCount={dailyDueCount} learningCount={dailyLearningCount} streak={calculateStreak(reviewHistory)} onStart={startDailyReview} onSnooze={snoozeDailyReview} onDismiss={dismissDailyReview} />
-    <CaseDialog item={selected} progress={selected ? progress[progressKey(selected)] : null} reviewSession={reviewSession ? { index: reviewSession.index, total: reviewSession.items.length } : null} open={Boolean(selected)} onOpenChange={(open) => { if (!open) { setSelected(null); setReviewSession(null); } }} onAddToLearning={() => selected && addToLearning(selected)} onMarkMastered={() => selected && setMastered(selected)} onCompleteReview={() => selected && finishReview(selected)} onRateReview={rateCurrentReview} />
+    <CaseDialog item={selected} progress={selected ? progress[progressKey(selected)] : null} reviewSession={reviewSession ? { index: reviewSession.index, total: reviewSession.items.length } : null} open={Boolean(selected)} onOpenChange={(open) => { if (!open) { setSelected(null); setReviewSession(null); } }} onAddToLearning={() => selected && addToLearning(selected)} onMarkMastered={() => selected && setMastered(selected)} onCompleteReview={() => selected && finishReview(selected)} onRateReview={rateCurrentReview} onStartTraining={() => selected && startTraining([selected], "single", `${selected.stage.toUpperCase()} ${selected.id} · 单案例循环`)} />
+    <CaseTrainerDialog session={trainingSession} onOpenChange={(open) => !open && setTrainingSession(null)} onRate={rateTraining} />
   </div>;
 }
 

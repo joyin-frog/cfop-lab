@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { CalendarClock, Check, Copy, RefreshCcw, X } from "lucide-react";
+import { CalendarClock, Check, Copy, RefreshCcw, Repeat2, X } from "lucide-react";
 import { AnimatedCube } from "./AnimatedCube";
+import { invertAlgorithm } from "../lib/algorithms";
 import { formatReviewDate, isReviewDue, progressStatus } from "../lib/progress";
 import { formatProbability } from "../lib/probability";
 
-export function CaseDialog({ item, progress, reviewSession, open, onOpenChange, onAddToLearning, onMarkMastered, onCompleteReview, onRateReview }) {
+export function CaseDialog({ item, progress, reviewSession, open, onOpenChange, onAddToLearning, onMarkMastered, onCompleteReview, onRateReview, onStartTraining }) {
   const [copied, setCopied] = useState("");
   const status = progressStatus(progress);
   const reviewDue = isReviewDue(progress);
@@ -13,6 +14,7 @@ export function CaseDialog({ item, progress, reviewSession, open, onOpenChange, 
   useEffect(() => setCopied(""), [item]);
 
   if (!item) return null;
+  const setupAlgorithm = invertAlgorithm(item.algorithm);
 
   async function copy(value, type) {
     await navigator.clipboard.writeText(value);
@@ -53,6 +55,20 @@ export function CaseDialog({ item, progress, reviewSession, open, onOpenChange, 
                 <code className="dialog-formula">{item.algorithm}</code>
                 <small className="formula-hint">左侧公式可逐步悬停演示</small>
               </div>
+              {!reviewSession && <div className="setup-card">
+                <div className="setup-card-heading">
+                  <span>摆出此案例 · SETUP</span>
+                  <button type="button" onClick={() => copy(setupAlgorithm, "setup")}>
+                    {copied === "setup" ? <Check /> : <Copy />}
+                    {copied === "setup" ? "已复制" : "复制摆型"}
+                  </button>
+                </div>
+                <code>{setupAlgorithm}</code>
+                <div className="setup-card-footer">
+                  <small>从复原状态开始，黄面朝上执行</small>
+                  <button type="button" onClick={onStartTraining}><Repeat2 />循环训练这条</button>
+                </div>
+              </div>}
               {item.alternatives?.length > 0 && <details className="alternative-card"><summary>其他顺手公式（{item.alternatives.length}）</summary>{item.alternatives.map((alg) => <code key={alg}>{alg}</code>)}</details>}
               {reviewSession ? (
                 <div className="review-rating">

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Alg } from "cubing/alg";
 import "cubing/twisty";
+import { invertAlgorithm } from "../lib/algorithms";
 
 const MOVE_SETTLE_DELAY = 40;
 
@@ -11,7 +11,7 @@ export function AnimatedCube({ algorithm, label, compact = false }) {
   const [ready, setReady] = useState(false);
   const [activeMove, setActiveMove] = useState(-1);
   const moves = useMemo(() => algorithm.trim().split(/\s+/).filter(Boolean), [algorithm]);
-  const setupAlgorithm = useMemo(() => `z2 ${new Alg(algorithm).invert().toString()}`, [algorithm]);
+  const setupAlgorithm = useMemo(() => `z2 ${invertAlgorithm(algorithm)}`, [algorithm]);
 
   useEffect(() => {
     setReady(false);
