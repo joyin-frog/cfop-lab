@@ -7,3 +7,4 @@ outputs/
 .vercel/
 .DS_Store
 *.log
+.env*
