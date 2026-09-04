@@ -74,5 +74,5 @@ export function DailyReviewDialog({ open, items, dueCount, learningCount, streak
 
 function ReviewCube({ item }) {
   if (!item) return null;
-  return <AnimatedCube algorithm={item.algorithm} label={`${item.name} 复习预览`} compact />;
+  return <AnimatedCube algorithm={item.algorithm} stage={item.stage} label={`${item.name} 复习预览`} compact />;
 }

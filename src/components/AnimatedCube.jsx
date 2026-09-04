@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { invertAlgorithm } from "../lib/algorithms";
+import { setupForSolution } from "../lib/algorithms";
 
 const MOVE_SETTLE_DELAY = 40;
 let twistyModulePromise;
@@ -9,7 +9,7 @@ function loadTwistyPlayer() {
   return twistyModulePromise;
 }
 
-export function AnimatedCube({ algorithm, label, compact = false }) {
+export function AnimatedCube({ algorithm, stage, label, compact = false }) {
   const playerRef = useRef(null);
   const previewTimerRef = useRef(null);
   const previewRunRef = useRef(0);
@@ -17,7 +17,10 @@ export function AnimatedCube({ algorithm, label, compact = false }) {
   const [loadError, setLoadError] = useState(false);
   const [activeMove, setActiveMove] = useState(-1);
   const moves = useMemo(() => algorithm.trim().split(/\s+/).filter(Boolean), [algorithm]);
-  const setupAlgorithm = useMemo(() => `z2 ${invertAlgorithm(algorithm)}`, [algorithm]);
+  const setupAlgorithm = useMemo(
+    () => `z2 ${setupForSolution({ algorithm, stage })}`,
+    [algorithm, stage],
+  );
 
   useEffect(() => {
     let cancelled = false;

@@ -2,7 +2,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { puzzles } from "cubing/puzzles";
 import { casesByStage } from "../src/data/cfopData.js";
-import { invertAlgorithm, trainingAlgorithms } from "../src/lib/algorithms.js";
+import {
+  invertAlgorithm,
+  OLL_TRAINING_REMAINDER,
+  trainingAlgorithms,
+} from "../src/lib/algorithms.js";
 
 const cubeRotations = ["", "x", "x2", "x'"].flatMap((x) =>
   ["", "y", "y2", "y'"].flatMap((y) =>
@@ -73,6 +77,25 @@ test("training algorithms include AUF and return the inverse setup", () => {
   assert.equal(result.setup, invertAlgorithm(result.solution));
 });
 
+test("OLL training finishes with yellow oriented but PLL still unsolved", async () => {
+  const puzzle = await puzzles["3x3x3"].kpuzzle();
+  const expectedRemainder = puzzle.defaultPattern().applyAlg(OLL_TRAINING_REMAINDER);
+
+  for (const item of casesByStage.oll) {
+    const { setup, solution } = trainingAlgorithms(item);
+    const result = puzzle.defaultPattern().applyAlg(setup).applyAlg(solution);
+
+    assert.deepEqual(result.patternData, expectedRemainder.patternData, `${item.id} should leave the training PLL`);
+  }
+
+  const { CORNERS, EDGES } = expectedRemainder.patternData;
+  assertSolvedLocations(CORNERS, 4, "OLL training remainder");
+  assertSolvedLocations(EDGES, 4, "OLL training remainder");
+  assert.ok(EDGES.pieces.slice(0, 4).some((piece, location) => piece !== location));
+  assert.ok(CORNERS.orientation.slice(0, 4).every((orientation) => orientation === 0));
+  assert.ok(EDGES.orientation.slice(0, 4).every((orientation) => orientation === 0));
+});
+
 test("every PLL algorithm changes only the last layer", async () => {
   const puzzle = await puzzles["3x3x3"].kpuzzle();
 
@@ -113,9 +136,7 @@ test("the OLL library produces all 57 distinct recognition patterns", async () =
   const signatures = new Map();
 
   for (const item of casesByStage.oll) {
-    const setup = invertAlgorithm(item.algorithm);
-    const pattern = puzzle.defaultPattern().applyAlg("z2").applyAlg(setup);
-    const signature = ["", "U", "U2", "U'"]
+    const canonicalSignature = (pattern) => ["", "U", "U2", "U'"]
       .map((auf) => recognitionSignature(
         puzzle,
         originalColors,
@@ -123,7 +144,11 @@ test("the OLL library produces all 57 distinct recognition patterns", async () =
         auf ? pattern.applyAlg(auf) : pattern,
       ))
       .sort()[0];
+    const referencePattern = puzzle.defaultPattern().applyAlg("z2").applyAlg(invertAlgorithm(item.algorithm));
+    const trainingPattern = puzzle.defaultPattern().applyAlg("z2").applyAlg(trainingAlgorithms(item).setup);
+    const signature = canonicalSignature(trainingPattern);
 
+    assert.equal(signature, canonicalSignature(referencePattern), `${item.id} training setup changes its OLL shape`);
     assert.equal(signatures.get(signature), undefined, `${item.id} duplicates OLL ${signatures.get(signature)}`);
     signatures.set(signature, item.id);
   }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { CalendarClock, Check, Copy, RefreshCcw, Repeat2, X } from "lucide-react";
 import { AnimatedCube } from "./AnimatedCube";
-import { invertAlgorithm } from "../lib/algorithms";
+import { trainingAlgorithms } from "../lib/algorithms";
 import { formatReviewDate, isReviewDue, progressStatus } from "../lib/progress";
 import { formatProbability } from "../lib/probability";
 
@@ -14,7 +14,7 @@ export function CaseDialog({ item, progress, reviewSession, open, onOpenChange, 
   useEffect(() => setCopied(""), [item]);
 
   if (!item) return null;
-  const setupAlgorithm = invertAlgorithm(item.algorithm);
+  const setupAlgorithm = trainingAlgorithms(item).setup;
 
   async function copy(value, type) {
     await navigator.clipboard.writeText(value);
@@ -34,7 +34,7 @@ export function CaseDialog({ item, progress, reviewSession, open, onOpenChange, 
 
           <div className="dialog-layout">
             <section className="diagram-panel" aria-label="状态识别图">
-              <AnimatedCube algorithm={item.algorithm} label={`${item.name} 公式动画`} />
+              <AnimatedCube algorithm={item.algorithm} stage={item.stage} label={`${item.name} 公式动画`} />
             </section>
 
             <section className="lesson-panel">
@@ -64,7 +64,7 @@ export function CaseDialog({ item, progress, reviewSession, open, onOpenChange, 
                 </div>
                 <code>{setupAlgorithm}</code>
                 <div className="setup-card-footer">
-                  <small>从复原状态开始，黄面朝上执行</small>
+                  <small>{item.stage === "oll" ? "公式后只完成黄面，侧面保留 PLL" : "从复原状态开始，黄面朝上执行"}</small>
                   <button type="button" onClick={onStartTraining}><Repeat2 />循环训练这条</button>
                 </div>
               </div>}

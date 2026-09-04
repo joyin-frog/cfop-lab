@@ -151,7 +151,7 @@ export function CaseTrainerDialog({ session, progress, onOpenChange, onRate }) {
                 <strong>{countdown}</strong>
                 <small>把手移回魔方，计时会在倒计时结束后开始。</small>
               </div> : <>
-                <AnimatedCube algorithm={algorithms.solution} label={phase === "answer" ? `${item.name} 训练案例` : "待识别案例"} compact />
+                <AnimatedCube algorithm={algorithms.solution} stage={item.stage} label={phase === "answer" ? `${item.name} 训练案例` : "待识别案例"} compact />
                 <div className="recognition-clock" aria-live="off"><Clock3 /><span>{elapsed.toFixed(1)}s</span><small>{phase === "question" ? "识别中" : "本题用时"}</small></div>
               </>}
             </section>
@@ -190,7 +190,7 @@ export function CaseTrainerDialog({ session, progress, onOpenChange, onRate }) {
                 <span className="trainer-eyebrow">03 · CHECK</span>
                 <Dialog.Title>{item.name}</Dialog.Title>
                 <Dialog.Description>{item.stage.toUpperCase()} {item.id} · {item.alias}</Dialog.Description>
-                <div className="trainer-answer-card"><div><span>本轮解法</span>{auf && <b>先做 {auf}</b>}</div><code>{algorithms.solution}</code><p>{item.recognition}</p></div>
+                <div className="trainer-answer-card"><div><span>本轮解法</span>{auf && <b>先做 {auf}</b>}</div><code>{algorithms.solution}</code><p>{item.stage === "oll" ? "执行后黄面完成，侧面会保留一个 PLL，属于正常结果。" : item.recognition}</p></div>
                 <div className="trainer-rating"><span>刚才认得怎么样？</span><div><button type="button" onClick={() => answer("again")}><strong>忘了</strong><small>{nextReviewLabel("again")}</small></button><button type="button" onClick={() => answer("hard")}><strong>有点犹豫</strong><small>{nextReviewLabel("hard")}</small></button><button className="is-good" type="button" onClick={() => answer("good")}><strong>很顺手</strong><small>{nextReviewLabel("good")}</small></button></div></div>
                 <button className="trainer-secondary-wide" type="button" onClick={() => resetSetup(false)}><RotateCcw />摆型有误，不记录本题</button>
               </>}
